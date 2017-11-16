@@ -1,5 +1,5 @@
 # townhall-SMS-alerts
-server side code alert people when their members of congress are holding town halls near them. 
+Motivation: Many people want to know when their member of congress is holding a town hall. Currently they can access this information by going to townhallproject.com and by signing up for email alerts. We want to make this information even more readily available by allowing people to access it with their phones via SMS. 
 
 ## MVP:
 User will text a number their zip code, in response they will get all upcoming events in their district (including Senate events). The event information will include the Member of congress, the title, and a link to directions. 
