@@ -4,7 +4,7 @@
   "description": "townhalls sms ",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest -i --coverage",
     "lint": "eslint --fix .",
     "start": "node index.js"
   },

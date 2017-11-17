@@ -18,6 +18,9 @@ module.exports = class TownHall {
   includeTownHall (districtObj) {
     let townhall = this;
     let include = false;
+    if (!districtObj.states || !districtObj.districts) {
+      throw new Error('The requested state not found');
+    }
 
     districtObj.states.forEach((state) => {
       if (state === townhall.state) {
@@ -31,7 +34,7 @@ module.exports = class TownHall {
         });
       }
     });
-    
+
     return include;
   }
 };
