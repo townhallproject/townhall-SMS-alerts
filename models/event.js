@@ -4,7 +4,7 @@ module.exports = class TownHall {
   constructor (fbtownhall){
     this.moc = fbtownhall.Member;
     this.district = fbtownhall.District;
-    this.state = fbtownhall.state;
+    this.state = fbtownhall.state || fbtownhall.District.split('-')[0];
     this.link= fbtownhall.link || `https://townhallproject.com?eventId=${fbtownhall.eventId}`;
     this.eventId = fbtownhall.eventId;
     this.address = fbtownhall.address;
@@ -15,20 +15,23 @@ module.exports = class TownHall {
     this.time = fbtownhall.Time;
   }
 
-  include (districtObj) {
+  includeTownHall (districtObj) {
+    let townhall = this;
+    let include = false;
+
     districtObj.states.forEach((state) => {
-      if (state === this.state) {
-        if (this.district === 'Senate') {
-          return true;
+      if (state === townhall.state) {
+        if (townhall.district === 'Senate') {
+          include = true;
         }
         districtObj.districts.forEach((district) => {
-          if (this.district === district) {
-            return true;
+          if (townhall.district === district) {
+            include = true;
           }
         });
-        return false;
       }
-      return false;
     });
+    
+    return include;
   }
 };

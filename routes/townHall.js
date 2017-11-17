@@ -14,8 +14,9 @@ townHallLookup.getDistricts = function(zip) {
     firebasedb.ref(`zipToDistrict/${zip}`).once('value').then((districtsData) => {
       districtsData.forEach((district) => {
         districtObj.states.push(district.val().abr);
-        districtObj.districts.push(`${district.val().abr}-${district.val().dis}`);
+        districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
       });
+      console.log(districtObj);
       resolve(districtObj);
     }).catch((err) => {
       reject(err);
@@ -30,11 +31,13 @@ townHallLookup.getEvents = function(districtObj) {
     firebasedb.ref(`townHalls`).once('value')
       .then((snapshot) => {
         snapshot.forEach((fbtownhall) => {
-          let townhall = new TownHall(fbtownhall);
-          if (townhall.include(districtObj)) {
+          let townhall = new TownHall(fbtownhall.val());
+
+          if (townhall.includeTownHall(districtObj)) {
             townHalls.push(townhall);
           }
         });
+        
         if (townHalls.length > 0) {
           resolve(townHalls);
         }
