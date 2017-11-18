@@ -26,8 +26,10 @@ smsRouter.post('/sms',
           townHalls.forEach((townhall) => {
             message = message + townhall.print();
           });
+          console.log('sending message: ', message);
           return MessagingResponse(res, message);
         }
+        console.log('no messages');
         MessagingResponse(res, 'There are not any upcoming town halls in your area.');
       }).catch(() => {
         next(new Error('Hey, sorry, but our database lookup failed'));
