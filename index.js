@@ -1,8 +1,11 @@
 'use strict';
-const firebaseDB = require('./lib/firebaseinit');
+const server = require('./lib/server.js');
+const townHallHandler = require('./routes/townHall');
 
-console.log(firebaseDB.ref('eventid').once('value')
-.then(snapshot => {
-  console.log(snapshot.val());
-}
-));
+townHallHandler.getDistricts('40312')
+  .then(townHallHandler.getEvents)
+  .then(console.log)
+  .catch(console.log)
+;
+
+server.start();
