@@ -8,6 +8,7 @@ const smsRouter = module.exports = express.Router();
 const townHallHandler = require('./townHall');
 const zipCleaner = /^\d{5}/g;
 smsRouter.post('/sms', bodyParser, (req, res) => {
+  console.log(`req.body: `, req.body.Body);
   let incoming = req.body.Body;
   if (incoming.match(zipcodeRegEx)){
 
