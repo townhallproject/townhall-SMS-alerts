@@ -11,7 +11,9 @@ townHallLookup.getDistricts = function(zip) {
       states:[],
       districts:[],
     };
+    console.log('Get districts: ' + zip);
     firebasedb.ref(`zipToDistrict/${zip}`).once('value').then((districtsData) => {
+      console.log('district data: ' + districtsData.val());
       districtsData.forEach((district) => {
         districtObj.states.push(district.val().abr);
         districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
@@ -19,6 +21,7 @@ townHallLookup.getDistricts = function(zip) {
       console.log(districtObj);
       resolve(districtObj);
     }).catch((err) => {
+      console.log(err);
       reject(err);
     });
   });
