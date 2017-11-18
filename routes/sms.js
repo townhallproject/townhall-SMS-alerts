@@ -28,7 +28,7 @@ smsRouter.post('/sms',
           });
           return MessagingResponse(res, message);
         }
-        next(res, 'There are not any upcoming town halls in your area.');
+        MessagingResponse(res, 'There are not any upcoming town halls in your area.');
       }).catch(() => {
         next(new Error('Hey, sorry, but our database lookup failed'));
       });
