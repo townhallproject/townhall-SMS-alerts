@@ -4,7 +4,7 @@ const townHallHandler = require('./routes/townHall');
 
 townHallHandler.getDistricts('40312')
   .then(townHallHandler.getEvents)
-  .then(console.log)
+  .then()
   .catch(console.log)
 ;
 
