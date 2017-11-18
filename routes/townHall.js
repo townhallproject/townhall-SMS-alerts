@@ -37,7 +37,7 @@ townHallLookup.getEvents = function(districtObj) {
             townHalls.push(townhall);
           }
         });
-        
+
         if (townHalls.length > 0) {
           resolve(townHalls);
         }
