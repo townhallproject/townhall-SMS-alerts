@@ -9,7 +9,7 @@ module.exports = class TownHall {
     this.eventId = fbtownhall.eventId;
     this.address = fbtownhall.address;
     this.meetingType = fbtownhall.meetingType;
-    this.rsvpLink = fbtownhall.RSVP || null;
+    // this.rsvpLink = fbtownhall.RSVP || null;
     this.location = fbtownhall.Location || null;
     this.date = fbtownhall.Date;
     this.time = fbtownhall.Time;
@@ -36,5 +36,8 @@ module.exports = class TownHall {
     });
 
     return include;
+  }
+  print () {
+    return `${this.moc} is holding a townhall at ${this.time}, ${this.date}. Address: ${this.address}.`;
   }
 };

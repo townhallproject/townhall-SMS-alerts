@@ -1,34 +1,35 @@
 'use strict';
-
+const firebasedb = require('../lib/firebaseinit');
 const bodyParser = require('body-parser').urlencoded({extended : false});
 const express = require('express');
-const MessagingResponse = require('twilio').twiml.MessagingResponse;
-const zipcodeRegEx = /^(\d{5}-\d{4}|\d{5}|\d{9})$|^([a-zA-Z]\d[a-zA-Z] \d[a-zA-Z]\d)$/g;
 const smsRouter = module.exports = express.Router();
 const townHallHandler = require('./townHall');
-const zipCleaner = /^\d{5}/g;
-smsRouter.post('/sms', bodyParser, (req, res) => {
-  let incoming = req.body.Body;
-  if (incoming.match(zipcodeRegEx)){
+const TownHall = require('../models/event.js');
+const MessagingResponse = require('../lib/response');
 
-    let zip = incoming.match(zipCleaner)[0];
-    townHallHandler.getDistricts(zip)
-      .then(townHallHandler.getEvents)
-      .then((events)=>{
-        const twiml = new MessagingResponse();
-        twiml.message(events);
-        res.writeHead(200, {'Content-Type': 'text/xml'});
-        res.end(twiml.toString());
-      })
-
-      .catch((err)=>{
-        const twiml = new MessagingResponse();
-        twiml.message(err);
-
-        res.writeHead(200, {'Content-Type': 'text/xml'});
-        res.end(twiml.toString());
-      })
-    ;
-
-  }
-});
+smsRouter.post('/sms',
+  bodyParser,
+  townHallHandler.checkZip,
+  townHallHandler.getDistricts,
+  (req, res, next) => {
+    let townHalls = [];
+    firebasedb.ref(`townHalls`).once('value')
+      .then((snapshot) => {
+        snapshot.forEach((fbtownhall) => {
+          let townhall = new TownHall(fbtownhall.val());
+          if (townhall.includeTownHall(req.districtObj)) {
+            townHalls.push(townhall);
+          }
+        });
+        if (townHalls.length > 0) {
+          let message = '';
+          townHalls.forEach((townhall) => {
+            message = message + townhall.print();
+          });
+          return MessagingResponse(res, message);
+        }
+        next(res, 'There are not any upcoming town halls in your area.');
+      }).catch(() => {
+        next(new Error('Hey, sorry, but our database lookup failed'));
+      });
+  });

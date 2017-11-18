@@ -1,47 +1,37 @@
 'use strict';
 const firebasedb = require('../lib/firebaseinit');
-const TownHall = require('../models/event.js');
+const zipcodeRegEx = /^(\d{5}-\d{4}|\d{5}|\d{9})$|^([a-zA-Z]\d[a-zA-Z] \d[a-zA-Z]\d)$/g;
+const zipCleaner = /^\d{5}/g;
+const MessagingResponse = require('../lib/response');
 
 const townHallLookup = module.exports = {};
 
-townHallLookup.getDistricts = function(zip) {
-  //return state and a district as arrays;
-  return new Promise(function(resolve, reject) {
-    let districtObj = {
-      states:[],
-      districts:[],
-    };
-    firebasedb.ref(`zipToDistrict/${zip}`).once('value').then((districtsData) => {
-      districtsData.forEach((district) => {
-        districtObj.states.push(district.val().abr);
-        districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
-      });
-      console.log(districtObj);
-      resolve(districtObj);
-    }).catch((err) => {
-      reject(err);
-    });
-  });
+townHallLookup.checkZip = function(req, res, next) {
+  let incoming = req.body.Body;
+  if (incoming.match(zipcodeRegEx)){
+    req.zipcode = incoming.match(zipCleaner)[0];
+    return next();
+  }
+  MessagingResponse(res, 'Please send us a zipcode to get upcoming events for your reps');
 };
 
-townHallLookup.getEvents = function(districtObj) {
-  //return an array of events matching this set of states and districts
-  return new Promise(function(resolve, reject) {
-    let townHalls = [];
-    firebasedb.ref(`townHalls`).once('value')
-      .then((snapshot) => {
-        snapshot.forEach((fbtownhall) => {
-          let townhall = new TownHall(fbtownhall.val());
-
-          if (townhall.includeTownHall(districtObj)) {
-            townHalls.push(townhall);
-          }
-        });
-
-        if (townHalls.length > 0) {
-          resolve(townHalls);
-        }
-        reject('There are not any upcoming town halls in your area.');
-      });
+townHallLookup.getDistricts = function(req, res, next) {
+  //return state and a district as arrays;
+  let districtObj = {
+    states:[],
+    districts:[],
+  };
+  firebasedb.ref(`zipToDistrict/${req.zipcode}`).once('value').then((districtsData) => {
+    if (!districtsData.exists()) {
+      return next(new Error('We could not find that zip code'));
+    }
+    districtsData.forEach((district) => {
+      districtObj.states.push(district.val().abr);
+      districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
+    });
+    req.districtObj = districtObj;
+    return next();
+  }).catch(() => {
+    next('We couldnt find that zipcode');
   });
 };
