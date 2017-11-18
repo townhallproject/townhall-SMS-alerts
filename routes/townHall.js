@@ -1,6 +1,5 @@
 'use strict';
 const firebasedb = require('../lib/firebaseinit');
-const TownHall = require('../models/event.js');
 const zipcodeRegEx = /^(\d{5}-\d{4}|\d{5}|\d{9})$|^([a-zA-Z]\d[a-zA-Z] \d[a-zA-Z]\d)$/g;
 const zipCleaner = /^\d{5}/g;
 const MessagingResponse = require('../lib/response');
@@ -23,13 +22,16 @@ townHallLookup.getDistricts = function(req, res, next) {
     districts:[],
   };
   firebasedb.ref(`zipToDistrict/${req.zipcode}`).once('value').then((districtsData) => {
+    if (!districtsData.exists()) {
+      return next(new Error('We could not find that zip code'));
+    }
     districtsData.forEach((district) => {
       districtObj.states.push(district.val().abr);
       districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
     });
     req.districtObj = districtObj;
     return next();
-  }).catch((err) => {
+  }).catch(() => {
     next('We couldnt find that zipcode');
   });
 };

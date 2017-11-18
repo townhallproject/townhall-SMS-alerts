@@ -37,4 +37,7 @@ module.exports = class TownHall {
 
     return include;
   }
+  print () {
+    return `${this.moc} is holding a townhall at ${this.time}, ${this.date}. Address: ${this.address}.`;
+  }
 };
