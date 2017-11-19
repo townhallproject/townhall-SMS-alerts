@@ -10,7 +10,9 @@ townHallLookup.checkZip = function(req, res, next) {
   let incoming = req.body.Body;
   if (incoming.match(zipcodeRegEx)){
     req.zipcode = incoming.match(zipCleaner)[0];
+    console.log('recieved this zip: ', incoming);
     return next();
+
   }
   MessagingResponse(res, 'Please send us a zipcode to get upcoming events for your reps');
 };
@@ -30,6 +32,7 @@ townHallLookup.getDistricts = function(req, res, next) {
       districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
     });
     req.districtObj = districtObj;
+    console.log('district object', districtObj);
     return next();
   }).catch(() => {
     next('We couldnt find that zipcode');
