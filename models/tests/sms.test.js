@@ -1,38 +1,23 @@
 'use strict';
-
+// require('dotenv').config();
 const request = require('superagent');
 const expect = require('expect');
 const server = require('../../lib/server');
 const xml2jsParser = require('superagent-xml2jsparser');
+let url;
 
 beforeAll(() => {
-  server.start();
+  let port = 5000;
+  url = `http://localhost:${port}/sms`;
+  server.start(port)
+    .then(console.log);
 });
+afterAll(server.stop);
 
 describe('SMS', () => {
   describe('POST /sms', () => {
     it('should respond with a 200 when there is an incoming zipcode', () => {
-      let url = `http://localhost:3000/sms`;
-      let incoming = { ToCountry: 'US',
-        ToState: 'WA',
-        SmsMessageSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        NumMedia: '0',
-        ToCity: '',
-        FromZip: '98110',
-        SmsSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        FromState: 'WA',
-        SmsStatus: 'received',
-        FromCity: 'SEATTLE',
-        Body: '98122',
-        FromCountry: 'US',
-        To: '+14252150661',
-        ToZip: '',
-        NumSegments: '1',
-        MessageSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        AccountSid: 'AC997dbe0246b58a4b61f97b51e66d692e',
-        From: '+12066976356',
-        ApiVersion: '2010-04-01' };
-
+      let incoming = {Body: '98122'};
       return request
         .post(url)
         .type('form')
@@ -46,26 +31,7 @@ describe('SMS', () => {
     });
 
     it('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code', () => {
-      let url = `http://localhost:3000/sms`;
-      let incoming = { ToCountry: 'US',
-        ToState: 'WA',
-        SmsMessageSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        NumMedia: '0',
-        ToCity: '',
-        FromZip: '98110',
-        SmsSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        FromState: 'WA',
-        SmsStatus: 'received',
-        FromCity: 'SEATTLE',
-        Body: 'thisshouldfail',
-        FromCountry: 'US',
-        To: '+14252150661',
-        ToZip: '',
-        NumSegments: '1',
-        MessageSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        AccountSid: 'AC997dbe0246b58a4b61f97b51e66d692e',
-        From: '+12066976356',
-        ApiVersion: '2010-04-01' };
+      let incoming = {Body: 'thisshouldfail'};
 
       return request
         .post(url)
@@ -79,7 +45,6 @@ describe('SMS', () => {
     });
 
     it('should respond with a 200 when req.body is empty but will prompt for a zip code', () => {
-      let url = `http://localhost:3000/sms`;
       let incoming = {};
 
       return request
@@ -94,7 +59,6 @@ describe('SMS', () => {
     });
 
     it('should respond with a 200 when req.body is not present but will prompt for a zip code', () => {
-      let url = `http://localhost:3000/sms`;
       //no req.body
 
       return request
@@ -108,26 +72,7 @@ describe('SMS', () => {
     });
 
     it('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code', () => {
-      let url = `http://localhost:3000/sms`;
-      let incoming = { ToCountry: 'US',
-        ToState: 'WA',
-        SmsMessageSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        NumMedia: '0',
-        ToCity: '',
-        FromZip: '98110',
-        SmsSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        FromState: 'WA',
-        SmsStatus: 'received',
-        FromCity: 'SEATTLE',
-        Body: '99999',
-        FromCountry: 'US',
-        To: '+14252150661',
-        ToZip: '',
-        NumSegments: '1',
-        MessageSid: 'SMff4054c7b835f97f98e97d3cf0244764',
-        AccountSid: 'AC997dbe0246b58a4b61f97b51e66d692e',
-        From: '+12066976356',
-        ApiVersion: '2010-04-01' };
+      let incoming = {Body: '99999'};
 
       return request
         .post(url)
