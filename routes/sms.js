@@ -4,35 +4,8 @@ const bodyParser = require('body-parser').urlencoded({extended : false});
 const express = require('express');
 const smsRouter = module.exports = express.Router();
 const townHallHandler = require('./townHall');
-<<<<<<< HEAD
-const zipCleaner = /^\d{5}/g;
-smsRouter.post('/sms', bodyParser, (req, res) => {
-  console.log(`req.body: `, req.body.Body);
-  let incoming = req.body.Body;
-  if (incoming.match(zipcodeRegEx)){
-
-    let zip = incoming.match(zipCleaner)[0];
-    townHallHandler.getDistricts(zip)
-      .then(townHallHandler.getEvents)
-      .then((events)=>{
-        const twiml = new MessagingResponse();
-        twiml.message(events);
-        res.writeHead(200, {'Content-Type': 'text/xml'});
-        res.end(twiml.toString());
-      })
-
-      .catch((err)=>{
-        const twiml = new MessagingResponse();
-        twiml.message(err);
-
-        res.writeHead(200, {'Content-Type': 'text/xml'});
-        res.end(twiml.toString());
-      })
-    ;
-=======
 const TownHall = require('../models/event.js');
 const MessagingResponse = require('../lib/response');
->>>>>>> ac94d67aa75bdce8ea3f27f74116a447b6aa55f8
 
 smsRouter.post('/sms',
   bodyParser,
