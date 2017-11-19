@@ -7,6 +7,9 @@ const townHallHandler = require('./townHall');
 const TownHall = require('../models/event.js');
 const MessagingResponse = require('../lib/response');
 
+
+
+
 smsRouter.post('/sms',
   bodyParser,
   townHallHandler.checkZip,
