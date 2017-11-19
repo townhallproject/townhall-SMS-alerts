@@ -1,8 +1,8 @@
 'use strict';
-// require('dotenv').config();
+
 const request = require('superagent');
 const expect = require('expect');
-const server = require('../../lib/server');
+const server = require('../lib/server');
 const xml2jsParser = require('superagent-xml2jsparser');
 let url;
 
