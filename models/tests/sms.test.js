@@ -12,7 +12,7 @@ describe('SMS', () => {
   afterAll(server.stop);
 
   describe('POST /sms', () => {
-    test('should respond with a 200 when there is an incoming zipcode', () => {
+    xtest('should respond with a 200 when there is an incoming zipcode', () => {
       let url = `http://localhost:${process.env.PORT}/sms`;
       let incoming = 'Body=98122';
       return request.post(url)
