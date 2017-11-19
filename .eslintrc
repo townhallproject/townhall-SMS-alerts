@@ -1,0 +1,31 @@
+{
+  "globals": {
+    "afterAll": true,
+    "beforeAll": true,
+    "err": true,
+    "expect": true,
+    "jest": true,
+    "next": true,
+    "req": true,
+    "res": true
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true,
+    "mocha": true
+  },
+  "rules": {
+    "no-console": "off",
+    "indent": [ "error", 2 ],
+    "semi": ["error", "always"],
+    "comma-dangle": ["error", "always-multiline"],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }]
+  },
+  "ecmaFeatures": {
+    "modules": true,
+    "impliedStrict": true,
+    "experimentalObjectRestSpread": true
+  },
+  "extends": "eslint:recommended"
+}

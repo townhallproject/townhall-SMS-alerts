@@ -4,8 +4,9 @@
   "description": "townhalls sms ",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "lint": "eslint --fix ."
+    "test": "jest -i --coverage --forceExit",
+    "lint": "eslint --fix .",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -18,15 +19,18 @@
   },
   "homepage": "https://github.com/townhallproject/townhall-SMS-alerts#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "firebase-admin": "^5.5.0",
+    "request": "^2.83.0",
     "twilio": "^3.9.3"
   },
   "devDependencies": {
     "eslint": "^4.11.0",
     "jest": "^21.2.1",
     "mocha": "^4.0.1",
-    "superagent": "^3.8.1"
+    "superagent": "^3.8.1",
+    "superagent-xml2jsparser": "^0.1.1"
   }
 }
