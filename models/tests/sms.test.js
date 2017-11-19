@@ -22,7 +22,6 @@ describe('SMS', () => {
         SmsSid: 'SMff4054c7b835f97f98e97d3cf0244764',
         FromState: 'WA',
         SmsStatus: 'received',
-
         FromCity: 'SEATTLE',
         Body: '98122',
         FromCountry: 'US',
@@ -57,7 +56,6 @@ describe('SMS', () => {
         SmsSid: 'SMff4054c7b835f97f98e97d3cf0244764',
         FromState: 'WA',
         SmsStatus: 'received',
-
         FromCity: 'SEATTLE',
         Body: 'thisshouldfail',
         FromCountry: 'US',
@@ -120,7 +118,6 @@ describe('SMS', () => {
         SmsSid: 'SMff4054c7b835f97f98e97d3cf0244764',
         FromState: 'WA',
         SmsStatus: 'received',
-
         FromCity: 'SEATTLE',
         Body: '99999',
         FromCountry: 'US',
