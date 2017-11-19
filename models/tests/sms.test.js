@@ -1,17 +1,19 @@
 'use strict';
+require('dotenv').config();
 const request = require('superagent');
 const expect = require('expect');
 const server = require('../../lib/server');
 
 describe('SMS', () => {
   beforeAll(() => {
-    return server.start();
+    process.env.PORT = 5000;
+    server.start();
   });
   afterAll(server.stop);
 
   describe('POST /sms', () => {
     test('should respond with a 200 when there is an incoming zipcode', () => {
-      let url = `http://localhost:3000/sms`;
+      let url = `http://localhost:${process.env.PORT}/sms`;
       let incoming = 'Body=98122';
       return request.post(url)
         .send(incoming)
