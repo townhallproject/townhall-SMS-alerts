@@ -1,12 +1,13 @@
 {
   "globals": {
-    "err": true,
-    "req": true,
-    "res": true,
-    "next": true,
-    "expect": true,
+    "afterAll": true,
     "beforeAll": true,
-    "afterAll": true
+    "err": true,
+    "expect": true,
+    "jest": true,
+    "next": true,
+    "req": true,
+    "res": true
   },
   "env": {
     "es6": true,

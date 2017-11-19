@@ -2,7 +2,6 @@
 const firebasedb = require('../lib/firebaseinit');
 const zipcodeRegEx = /^(\d{5}-\d{4}|\d{5}|\d{9})$|^([a-zA-Z]\d[a-zA-Z] \d[a-zA-Z]\d)$/g;
 const zipCleaner = /^\d{5}/g;
-const MessagingResponse = require('../lib/response');
 
 const townHallLookup = module.exports = {};
 
@@ -15,7 +14,7 @@ townHallLookup.checkZip = function(req, res, next) {
     return next();
 
   }
-  MessagingResponse(res, 'Please send us a zipcode to get upcoming events for your reps');
+  next(new Error('Please send us a zipcode to get upcoming events for your reps'));
 };
 
 townHallLookup.getDistricts = function(req, res, next) {
@@ -24,7 +23,7 @@ townHallLookup.getDistricts = function(req, res, next) {
     states:[],
     districts:[],
   };
-  firebasedb.ref(`zipToDistrict/${req.zipcode}`).once('value').then((districtsData) => {
+  return firebasedb.ref(`zipToDistrict/${req.zipcode}`).once('value').then((districtsData) => {
     if (!districtsData.exists()) {
       return next(new Error('We could not find that zip code'));
     }
