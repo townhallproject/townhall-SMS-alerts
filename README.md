@@ -6,6 +6,9 @@ Motivation: Many people want to know when their member of congress is holding a 
 ## MVP:
 User will text a number their zip code, in response they will get all upcoming events in their district (including Senate events). The event information will include the Member of congress, the title, and a link to directions.
 
+Current testing phonenumber in production: 415-231-1324
+Zip with events: 27278
+
 
 ## Stretch Goals:
 Ongoing SMS alerts
