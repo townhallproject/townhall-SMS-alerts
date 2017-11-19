@@ -1,8 +1,6 @@
 'use strict';
-
-const firebasemock = require('firebase-mock');
+require('dotenv').config();
 const townHallHandler = require('../townHall');
-const proxyquire = require('proxyquire');
 
 let firebaseData = {
   98122: [],
@@ -23,19 +21,6 @@ let resetMocks = () => {
 };
 
 describe('Town hall middleware', () => {
-  beforeAll(() => {
-    var mockdatabase = new firebasemock.MockFirebase();
-    var mockauth = new firebasemock.MockFirebase();
-    var mocksdk = firebasemock.MockFirebaseSdk(function(path) {
-      return path ? mockdatabase.child(path) : mockdatabase;
-    }, function() {
-      return mockauth;
-    });
-    const mySrc = proxyquire('../../lib/firebaseinit', {
-      admin: mocksdk,
-    });
-    mockdatabase.flush();
-  });
   beforeEach(() => {
     resetMocks();
   });
