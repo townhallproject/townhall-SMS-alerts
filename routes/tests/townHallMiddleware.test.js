@@ -1,6 +1,6 @@
 'use strict';
 require('dotenv').config();
-const townHallHandler = require('../townHall');
+const townHallHandler = require('../townHallMiddleware');
 
 let req;
 let res;
@@ -40,7 +40,10 @@ describe('Town hall middleware', () => {
       req.zipcode = '98122';
       return townHallHandler.getDistricts(req, res, () => {
         expect(typeof req.districtObj).toEqual('object');
-        expect(req.districtObj).toEqual({ states: [ 'WA', 'WA' ], districts: [ 'WA-7', 'WA-9' ] });
+        expect(req.districtObj).toEqual({
+          states: ['WA', 'WA'],
+          districts: ['WA-7', 'WA-9'],
+        });
       });
     });
     test('it should return an error if not a zip in the database', () => {
