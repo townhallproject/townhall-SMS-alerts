@@ -7,8 +7,7 @@ const townHallHandler = require('./townHall');
 const TownHall = require('../models/event.js');
 const MessagingResponse = require('../lib/response');
 
-
-
+smsRouter.get('/', console.log('get');)
 
 smsRouter.post('/sms',
   bodyParser,
