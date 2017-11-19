@@ -7,12 +7,13 @@ const townHallLookup = module.exports = {};
 
 townHallLookup.checkZip = function(req, res, next) {
   let incoming = req.body.Body;
-  console.log(incoming);
-  if (incoming.match(zipcodeRegEx)){
+
+  if (incoming && incoming.match(zipcodeRegEx)){
+
     req.zipcode = incoming.match(zipCleaner)[0];
+    console.log(`req zip: `, req.zipcode);
     console.log('recieved this zip: ', incoming);
     return next();
-
   }
   next(new Error('Please send us a zipcode to get upcoming events for your reps'));
 };
