@@ -1,7 +1,7 @@
 'use strict';
 
 const TownHall = require('../event');
-const testTownHallData = require('./testTownHall');
+const testTownHallData = require('./mockTownHall');
 
 describe('class TownHall', () => {
   describe('townhall constructor', () => {
@@ -44,6 +44,10 @@ describe('class TownHall', () => {
       };
       expect(failure).toThrow('The requested state not found');
     });
-
+    test('it should return a message if townhalls exsist', ()=> {
+      let newTownHall = new TownHall(testTownHallData);
+      let include = newTownHall.print();
+      expect(include).toEqual('Marc Veasey is holding a townhall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.');
+    });
   });
 });
