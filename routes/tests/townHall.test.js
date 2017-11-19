@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 const townHallHandler = require('../townHall');
 
 let firebaseData = {
