@@ -1,14 +1,13 @@
 'use strict';
 const firebasedb = require('../lib/firebaseinit');
-const bodyParser = require('body-parser').urlencoded({extended : false});
+const bodyParser = require('body-parser').urlencoded({
+  extended: false,
+});
 const express = require('express');
 const smsRouter = module.exports = express.Router();
-const townHallHandler = require('./townHall');
+const townHallHandler = require('./townHallMiddleware');
 const TownHall = require('../models/event.js');
 const MessagingResponse = require('../lib/response');
-
-
-
 
 smsRouter.post('/sms',
   bodyParser,
@@ -29,7 +28,6 @@ smsRouter.post('/sms',
           townHalls.forEach((townhall) => {
             message = message + townhall.print();
           });
-          console.log('sending message: ', message);
           return MessagingResponse(res, message);
         }
         console.log('no messages');
