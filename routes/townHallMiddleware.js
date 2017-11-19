@@ -8,11 +8,10 @@ const townHallLookup = module.exports = {};
 townHallLookup.checkZip = function(req, res, next) {
   let incoming = req.body.Body;
 
-  if (incoming && incoming.match(zipcodeRegEx)){
+  if (incoming && incoming.match(zipcodeRegEx)) {
 
     req.zipcode = incoming.match(zipCleaner)[0];
     console.log(`req zip: `, req.zipcode);
-    console.log('recieved this zip: ', incoming);
     return next();
   }
   next(new Error('Please send us a zipcode to get upcoming events for your reps'));
@@ -21,8 +20,8 @@ townHallLookup.checkZip = function(req, res, next) {
 townHallLookup.getDistricts = function(req, res, next) {
   //return state and a district as arrays;
   let districtObj = {
-    states:[],
-    districts:[],
+    states: [],
+    districts: [],
   };
   return firebasedb.ref(`zipToDistrict/${req.zipcode}`).once('value').then((districtsData) => {
     if (!districtsData.exists()) {
