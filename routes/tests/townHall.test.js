@@ -2,10 +2,6 @@
 require('dotenv').config();
 const townHallHandler = require('../townHall');
 
-let firebaseData = {
-  98122: [],
-};
-
 let req;
 let res;
 
@@ -49,9 +45,9 @@ describe('Town hall middleware', () => {
     });
     test('it should return an error if not a zip in the database', () => {
       req.zipcode = '11111';
-      let mockNext = jest.fn();
-      let errorResponse = townHallHandler.getDistricts(req, res, mockNext);
-      expect(req.districtObj).toEqual(undefined);
+      return townHallHandler.getDistricts(req, res, () => {
+        expect(req.districtObj).toEqual();
+      });
     });
   });
 });

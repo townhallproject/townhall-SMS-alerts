@@ -4,7 +4,8 @@
     "req": true,
     "res": true,
     "next": true,
-    "expect": true
+    "expect": true,
+    "jest": true
   },
   "env": {
     "es6": true,

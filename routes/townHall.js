@@ -2,7 +2,6 @@
 const firebasedb = require('../lib/firebaseinit');
 const zipcodeRegEx = /^(\d{5}-\d{4}|\d{5}|\d{9})$|^([a-zA-Z]\d[a-zA-Z] \d[a-zA-Z]\d)$/g;
 const zipCleaner = /^\d{5}/g;
-const MessagingResponse = require('../lib/response');
 
 const townHallLookup = module.exports = {};
 
