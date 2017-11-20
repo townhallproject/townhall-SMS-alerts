@@ -7,7 +7,8 @@ const express = require('express');
 const smsRouter = module.exports = express.Router();
 const townHallHandler = require('./townHallMiddleware');
 const TownHall = require('../models/event.js');
-const MessagingResponse = require('../lib/response');
+const messaging = require('../lib/response');
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 smsRouter.post('/sms',
   bodyParser,
@@ -24,15 +25,16 @@ smsRouter.post('/sms',
           }
         });
         if (townHalls.length > 0) {
-          let message = '';
+          let twiml = new MessagingResponse();
           townHalls.forEach((townhall) => {
-            message = message + townhall.print();
+            twiml.message(townhall.print());
           });
-          return MessagingResponse(res, message);
+          twiml.message('That\'s all the events we have for your reps');
+          return messaging.end(res, twiml);
         }
-        console.log('no messages');
-        MessagingResponse(res, 'There are not any upcoming town halls in your area.');
-      }).catch(() => {
+        messaging.sendAndWrite(res, 'There are not any upcoming town halls in your area.');
+      }).catch((e) => {
+        console.log(e);
         next(new Error('Hey, sorry, but our database lookup failed'));
       });
   });
