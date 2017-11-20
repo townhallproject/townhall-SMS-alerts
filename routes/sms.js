@@ -1,14 +1,16 @@
 'use strict';
-const firebasedb = require('../lib/firebaseinit');
+const express = require('express');
 const bodyParser = require('body-parser').urlencoded({
   extended: false,
 });
-const express = require('express');
 const smsRouter = module.exports = express.Router();
-const townHallHandler = require('./townHallMiddleware');
-const TownHall = require('../models/event.js');
-const messaging = require('../lib/response');
+
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
+const messaging = require('../lib/response');
+
+const firebasedb = require('../lib/firebaseinit');
+const TownHall = require('../models/event.js');
+const townHallHandler = require('./townHallMiddleware');
 
 smsRouter.post('/sms',
   bodyParser,
