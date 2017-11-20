@@ -1,5 +1,5 @@
 # townhall-SMS-alerts
-https://travis-ci.org/townhallproject/townhall-SMS-alerts.svg?branch=feature%2Ftravis
+[![Build Status](https://travis-ci.org/townhallproject/townhall-SMS-alerts.svg?branch=master)](https://travis-ci.org/townhallproject/townhall-SMS-alerts)
 
 Motivation: Many people want to know when their member of congress is holding a town hall. Currently they can access this information by going to townhallproject.com and by signing up for email alerts. We want to make this information even more readily available by allowing people to access it with their phones via SMS.
 
