@@ -9,7 +9,6 @@ townHallLookup.checkZip = function(req, res, next) {
   let incoming = req.body.Body;
 
   if (incoming && incoming.match(zipcodeRegEx)) {
-
     req.zipcode = incoming.match(zipCleaner)[0];
     console.log(`req zip: `, req.zipcode);
     return next();
@@ -23,18 +22,20 @@ townHallLookup.getDistricts = function(req, res, next) {
     states: [],
     districts: [],
   };
-  return firebasedb.ref(`zipToDistrict/${req.zipcode}`).once('value').then((districtsData) => {
-    if (!districtsData.exists()) {
-      return next(new Error('We could not find that zip code'));
-    }
-    districtsData.forEach((district) => {
-      districtObj.states.push(district.val().abr);
-      districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
+  return firebasedb.ref(`zipToDistrict/${req.zipcode}`)
+    .once('value').then((districtsData) => {
+      console.log(districtsData);
+      if (!districtsData.exists()) {
+        return next(new Error('We could not find that zip code'));
+      }
+      districtsData.forEach((district) => {
+        districtObj.states.push(district.val().abr);
+        districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
+      });
+      req.districtObj = districtObj;
+      console.log('district object', districtObj);
+      return next();
+    }).catch(() => {
+      next('We couldnt find that zipcode');
     });
-    req.districtObj = districtObj;
-    console.log('district object', districtObj);
-    return next();
-  }).catch(() => {
-    next('We couldnt find that zipcode');
-  });
 };
