@@ -7,7 +7,7 @@ const smsRouter = module.exports = express.Router();
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const messaging = require('../lib/response');
-
+const session = require('express-session');
 const townHallHandler = require('./townHallMiddleware');
 const getEvents = require('./getEventsMiddleware');
 
