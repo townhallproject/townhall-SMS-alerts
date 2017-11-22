@@ -9,7 +9,30 @@ let url;
 beforeAll(() => {
   let port = 5000;
   url = `http://localhost:${port}/sms`;
-  server.start(port);
+  const server = require('../lib/server.js');
+  const express = require('express');
+  const smsRouter = require('../routes/sms');
+  const app = express();
+  const messaging = require('../lib/response');
+  const session = require('express-session');
+
+  app.use(session({ secret: 'anything' }) );
+
+  app.use((req, res, next) => {
+    let sessionData = req.session;
+    sessionData.counter = sessionData.counter || 0;
+    sessionData.counter++;
+    next();
+  });
+
+  app.use(smsRouter);
+
+  app.use((err, req, res, next) => {
+    console.log('err', err.message);
+    messaging.sendAndWrite(res, err.message);
+    next();
+  });
+  server.start(app, port);
 });
 afterAll(server.stop);
 
