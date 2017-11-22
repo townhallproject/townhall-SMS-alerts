@@ -7,6 +7,7 @@ const xml2jsParser = require('superagent-xml2jsparser');
 let url;
 
 beforeAll(() => {
+  jest.dontMock('firebase-admin');
   let port = 5000;
   url = `http://localhost:${port}/sms`;
   server.start(port);
