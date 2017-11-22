@@ -16,7 +16,7 @@ beforeAll(() => {
   const messaging = require('../lib/response');
   const session = require('express-session');
 
-  app.use(session({ secret: 'anything' }) );
+  app.use(session({ secret: process.env.SESSION_SECRET }) );
 
   app.use((req, res, next) => {
     let sessionData = req.session;
