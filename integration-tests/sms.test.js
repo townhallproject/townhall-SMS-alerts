@@ -15,21 +15,16 @@ beforeAll(() => {
   const app = express();
   const messaging = require('../lib/response');
   const session = require('express-session');
+  const reqTwiml = require('../routes/sessionMiddleware');
+
 
   app.use(session({ secret: 'anything' }) );
 
-  app.use((req, res, next) => {
-    let sessionData = req.session;
-    sessionData.counter = sessionData.counter || 0;
-    sessionData.counter++;
-    next();
-  });
-
-  app.use(smsRouter);
+  app.use(reqTwiml, smsRouter);
 
   app.use((err, req, res, next) => {
     console.log('err', err.message);
-    messaging.sendAndWrite(res, err.message);
+    messaging.sendAndWrite(req, res, err.message);
     next();
   });
   server.start(app, port);
