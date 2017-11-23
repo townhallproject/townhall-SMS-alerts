@@ -4,23 +4,18 @@ const express = require('express');
 const PORT = process.env.PORT || 3000;
 const smsRouter = require('./routes/sms');
 const app = express();
-const messaging = require('./response');
+const messaging = require('./lib/response');
 const session = require('express-session');
+const reqTwiml = require('./routes/sessionMiddleware');
+const sessionSecret = process.env.SESSION_SECRET;
 
-app.use(session({ secret: 'anything' }) );
+app.use(session({ secret: sessionSecret }) );
 
-app.use((req, res, next) => {
-  let sessionData = req.session;
-  sessionData.counter = sessionData.counter || 0;
-  sessionData.counter++;
-  next();
-});
-
-app.use(smsRouter);
+app.use(reqTwiml, smsRouter);
 
 app.use((err, req, res, next) => {
   console.log('err', err.message);
-  messaging.sendAndWrite(res, err.message);
+  messaging.sendAndWrite(req, res, err.message);
   next();
 });
 
