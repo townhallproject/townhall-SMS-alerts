@@ -9,6 +9,7 @@ const messaging = require('../lib/response');
 
 const townHallHandler = require('./townHallMiddleware');
 const getEvents = require('./getEventsMiddleware');
+const checkSubscribe = require('./checkSubscribeMiddleware');
 
 // const twilioAccountSid = process.env.TWILIO_ACCOUNT_ID;
 // const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
@@ -18,10 +19,12 @@ const getEvents = require('./getEventsMiddleware');
 
 smsRouter.post('/sms',
   bodyParser,
+  checkSubscribe,
   townHallHandler.checkZip,
   townHallHandler.getDistricts,
   getEvents,
   (req, res) => {
+    console.log(req.subscribe);
     if (req.townHalls.length > 0) {
       req.townHalls.forEach((townhall) => {
         req.twiml.message(townhall.print());
