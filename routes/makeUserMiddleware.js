@@ -3,18 +3,15 @@
 const User = require('../models/user.js');
 const firebasedb = require('../lib/firebaseinit');
 
-module.exports = function(req, res, next){
-  let users = [];
+module.exports = function(req){
+
   firebasedb.ref(`sms-users`).once('value')
     .then((snapshot) => {
       snapshot.forEach((user) => {
-        let newUser = new User(newUser.val());
-        if (newUser.includeTownHall(req.districtObj)) {
-          users.push(user);
-        }
+        let newUser = new User (req, user);
+        newUser.writeToFirebase(newUser);
+        // return next();
 
       });
-      req.users = users;
-      return next();
     });
 };

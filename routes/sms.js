@@ -10,6 +10,7 @@ const messaging = require('../lib/response');
 const townHallHandler = require('./townHallMiddleware');
 const getEvents = require('./getEventsMiddleware');
 const checkSubscribe = require('./checkSubscribeMiddleware');
+const makeUser = require('./makeUserMiddleware');
 
 // const twilioAccountSid = process.env.TWILIO_ACCOUNT_ID;
 // const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
@@ -25,14 +26,19 @@ smsRouter.post('/sms',
   getEvents,
   (req, res) => {
     console.log(req.subscribe);
-    if (req.townHalls.length > 0) {
-      req.townHalls.forEach((townhall) => {
-        req.twiml.message(townhall.print());
-      });
-      req.twiml.message('That\'s all the events we have for your reps');
-      return messaging.end(res, req.twiml);
+    if(req.subscribe === true){
+      makeUser(req);
     }
-    messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area.');
+    if(req.subscribe === false){
+      if (req.townHalls.length > 0) {
+        req.townHalls.forEach((townhall) => {
+          req.twiml.message(townhall.print());
+        });
+        req.twiml.message('That\'s all the events we have for your reps');
+        return messaging.end(res, req.twiml);
+      }
+      messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area.');
+    }
   });
 
 // smsRouter.post('/broadcast',
