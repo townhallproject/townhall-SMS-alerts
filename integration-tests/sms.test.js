@@ -43,12 +43,12 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual([ 'There are not any upcoming town halls in your area.' ]);
+          expect(res.body.Response.Message).toEqual([ 'There are not any upcoming town halls in your area. Send subscribe <zip code> to get reoccuring updates.' ]);
         });
 
     });
 
-    test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code', () => {
+    test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code.', () => {
       let incoming = {Body: 'thisshouldfail'};
 
       return request
@@ -58,7 +58,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual([ 'Please send us a zipcode to get upcoming events for your reps' ]);
+          expect(res.body.Response.Message).toEqual([ 'Please send us a zipcode to get upcoming events for your reps.' ]);
         });
     });
 
@@ -99,7 +99,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual(['We could not find that zip code']);
+          expect(res.body.Response.Message).toEqual(['We could not find that zip code.']);
         });
     });
     test('should return message from an array', ()=>{
