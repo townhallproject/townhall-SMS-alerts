@@ -5,16 +5,15 @@ const firebasedb = require('../lib/firebaseinit');
 const messaging = require('../lib/response');
 
 
-module.exports = function(req){
+module.exports = function(req, res){
+  console.log('reached make user middleware');
 
   firebasedb.ref(`sms-users`).once('value')
-    .then((snapshot) => {
-      snapshot.forEach((user) => {
-        let newUser = new User (req, user);
-        newUser.writeToFirebase(newUser);
-        messaging.sendAndWrite(req, res, 'You have been added for updates in your area.');
-        // return next();
-
-      });
+    .then( () => {
+      console.log('reached snapshot');
+      let newUser = new User (req);
+      newUser.writeToFirebase(newUser);
+      req.twiml.message('You have been added for updates in your chosen area code');
+      return messaging.end(res, req.twiml);
     });
 };
