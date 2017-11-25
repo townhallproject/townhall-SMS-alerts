@@ -10,11 +10,11 @@ const messaging = require('../lib/response');
 const townHallHandler = require('./townHallMiddleware');
 const getEvents = require('./getEventsMiddleware');
 
-const twilioAccountSid = process.env.TWILIO_ACCOUNT_ID;
-const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(twilioAccountSid, twilioAuthToken);
-const myTwilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
-const jsonParser = require('body-parser').json();
+// const twilioAccountSid = process.env.TWILIO_ACCOUNT_ID;
+// const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+// const client = require('twilio')(twilioAccountSid, twilioAuthToken);
+// const myTwilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+// const jsonParser = require('body-parser').json();
 
 smsRouter.post('/sms',
   bodyParser,
@@ -32,19 +32,19 @@ smsRouter.post('/sms',
     messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area.');
   });
 
-smsRouter.post('/broadcast',
-  jsonParser,
-  (req, res) => {
-
-    req.body.users.forEach((user) => {
-
-      client.messages.create({
-        body: req.body.message,
-        to: user.phoneNumber,
-        from: myTwilioPhoneNumber,
-      })
-        .then((message) => process.stdout.write(message.sid));
-    });
-    res.send('Successfully Sent');
-
-  });
+// smsRouter.post('/broadcast',
+//   jsonParser,
+//   (req, res) => {
+//
+//     req.body.users.forEach((user) => {
+//
+//       client.messages.create({
+//         body: req.body.message,
+//         to: user.phoneNumber,
+//         from: myTwilioPhoneNumber,
+//       })
+//         .then((message) => process.stdout.write(message.sid));
+//     });
+//     res.send('Successfully Sent');
+//
+//   });
