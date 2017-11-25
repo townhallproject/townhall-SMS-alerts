@@ -25,7 +25,6 @@ smsRouter.post('/sms',
   townHallHandler.getDistricts,
   getEvents,
   (req, res) => {
-    console.log(req.subscribe);
     if(req.subscribe === true){
       makeUser(req);
     }

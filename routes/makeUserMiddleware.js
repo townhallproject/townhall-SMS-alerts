@@ -2,6 +2,8 @@
 
 const User = require('../models/user.js');
 const firebasedb = require('../lib/firebaseinit');
+const messaging = require('../lib/response');
+
 
 module.exports = function(req){
 
@@ -10,6 +12,7 @@ module.exports = function(req){
       snapshot.forEach((user) => {
         let newUser = new User (req, user);
         newUser.writeToFirebase(newUser);
+        messaging.sendAndWrite(req, res, 'You have been added for updates in your area.');
         // return next();
 
       });
