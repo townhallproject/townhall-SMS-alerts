@@ -32,7 +32,7 @@ describe('Town hall middleware', () => {
       req.body.Body = 'bbsdfd';
       let mockNext = jest.fn();
       townHallHandler.checkZip(req, res, mockNext);
-      expect(mockNext.mock.calls[0][0].message).toEqual('Please send us a zipcode to get upcoming events for your reps');
+      expect(mockNext.mock.calls[0][0].message).toEqual('Please send us a zipcode to get upcoming events for your reps.');
     });
   });
   describe('get districts', () => {
