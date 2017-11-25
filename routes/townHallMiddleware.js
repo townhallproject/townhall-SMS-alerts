@@ -17,7 +17,7 @@ townHallLookup.checkZip = function(req, res, next) {
     return next();
   }
   console.log('err incoming : ', incoming);
-  next(new Error('Please send us a zipcode to get upcoming events for your reps'));
+  next(new Error('Please send us a zipcode to get upcoming events for your reps.'));
 };
 
 townHallLookup.getDistricts = function(req, res, next) {
@@ -28,7 +28,7 @@ townHallLookup.getDistricts = function(req, res, next) {
   };
   return firebasedb.ref(`zipToDistrict/${req.zipcode}`).once('value').then((districtsData) => {
     if (!districtsData.exists()) {
-      return next(new Error('We could not find that zip code'));
+      return next(new Error('We could not find that zip code.'));
     }
     districtsData.forEach((district) => {
       districtObj.states.push(district.val().abr);
@@ -38,6 +38,6 @@ townHallLookup.getDistricts = function(req, res, next) {
     console.log('district object', districtObj);
     return next();
   }).catch(() => {
-    next('We couldnt find that zipcode');
+    next('We couldnt find that zipcode.');
   });
 };
