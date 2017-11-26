@@ -6,7 +6,6 @@ const zipCleaner = /^\d{5}/g;
 const townHallLookup = module.exports = {};
 
 townHallLookup.checkZip = function(req, res, next) {
-  console.log('reached checkzip');
   let incoming = req.body.Body;
   if(req.subscribe === true){
     let response = req.body.Body.split(' ');
@@ -22,7 +21,6 @@ townHallLookup.checkZip = function(req, res, next) {
 };
 
 townHallLookup.getDistricts = function(req, res, next) {
-  console.log('reached get distrcits');
   //return state and a district as arrays;
   let districtObj = {
     states: [],

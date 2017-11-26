@@ -4,7 +4,6 @@ const TownHall = require('../models/event.js');
 const firebasedb = require('../lib/firebaseinit');
 
 module.exports = function(req, res, next){
-  console.log('reached get events');
   if( req.subscribe === true){
     return next();
   }

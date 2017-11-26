@@ -26,11 +26,9 @@ smsRouter.post('/sms',
   getEvents,
   (req, res) => {
     if(req.subscribe === true){
-      console.log('reached subscribe true call');
       makeUser(req, res);
     }
     if(req.subscribe === false){
-      console.log('reached subscribe false call');
       if (req.townHalls.length > 0) {
         req.townHalls.forEach((townhall) => {
           req.twiml.message(townhall.print());
