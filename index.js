@@ -6,7 +6,7 @@ const smsRouter = require('./routes/sms');
 const app = express();
 const messaging = require('./lib/response');
 const session = require('express-session');
-const reqTwiml = require('./routes/sessionMiddleware');
+const reqTwiml = require('./middleware/session');
 const sessionSecret = process.env.SESSION_SECRET;
 const database = require('./database/firebaseListener');
 
@@ -20,7 +20,7 @@ app.use(session({
 app.use(reqTwiml, smsRouter);
 
 app.use((err, req, res, next) => {
-  console.log('err', err.message);
+  console.log('err', err);
   messaging.sendAndWrite(req, res, err.message);
   next();
 });

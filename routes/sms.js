@@ -7,10 +7,10 @@ const smsRouter = module.exports = express.Router();
 
 const messaging = require('../lib/response');
 
-const townHallHandler = require('./townHallMiddleware');
-const getEvents = require('./getEventsMiddleware');
-const checkSubscribe = require('./checkSubscribeMiddleware');
-const makeUser = require('./makeUserMiddleware');
+const townHallHandler = require('../middleware/getDistricts');
+const getEvents = require('../middleware/getEvents');
+const checkSubscribe = require('../middleware/checkSubscribe');
+const makeUser = require('../middleware/makeUser');
 
 smsRouter.post('/sms',
   bodyParser,

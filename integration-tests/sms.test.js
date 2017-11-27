@@ -16,7 +16,7 @@ beforeAll(() => {
   const app = express();
   const messaging = require('../lib/response');
   const session = require('express-session');
-  const reqTwiml = require('../routes/sessionMiddleware');
+  const reqTwiml = require('../middleware/session');
 
   app.use(session({
     secret: 'sessionSecret',
