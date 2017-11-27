@@ -4,9 +4,9 @@ const firebasedb = require('../lib/firebaseinit');
 
 module.exports = class User {
   constructor (req){
+    console.log('calling user');
     this.phoneNumber = req.body.From;
     this.zipcode = req.session.zipcode;
-
   }
 
   writeToFirebase() {
