@@ -20,7 +20,7 @@ app.use(session({
 app.use(reqTwiml, smsRouter);
 
 app.use((err, req, res, next) => {
-  console.log('err', err.message);
+  console.log('err', err);
   messaging.sendAndWrite(req, res, err.message);
   next();
 });

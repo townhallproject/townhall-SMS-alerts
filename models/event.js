@@ -5,8 +5,8 @@ const firebasedb = require('../lib/firebaseinit');
 module.exports = class TownHall {
   constructor (fbtownhall){
     this.moc = fbtownhall.Member;
-    this.district = fbtownhall.District;
-    this.state = fbtownhall.state || fbtownhall.District.split('-')[0];
+    this.district = fbtownhall.district || 'Senate';
+    this.state = fbtownhall.state;
     this.link= fbtownhall.link || `https://townhallproject.com?eventId=${fbtownhall.eventId}`;
     this.eventId = fbtownhall.eventId;
     this.address = fbtownhall.address;
@@ -18,23 +18,24 @@ module.exports = class TownHall {
     this.time = fbtownhall.Time;
   }
 
-  includeTownHall (districtObj) {
+  includeTownHall (districts) {
     let townhall = this;
     let include = false;
-    if (!districtObj.states || !districtObj.districts) {
+    if (districts.length === 0) {
       throw new Error('The requested state not found');
     }
 
-    districtObj.states.forEach((state) => {
-      if (state === townhall.state) {
+    districts.forEach((district) => {
+      if (district.state === townhall.state) {
         if (townhall.district === 'Senate') {
+          console.log('senate');
           include = true;
-        }
-        districtObj.districts.forEach((district) => {
-          if (townhall.district === district) {
+        } else {
+          console.log(townhall.state, district.state, townhall.district, district.district);
+          if ((townhall.state === district.state) && (townhall.district === district.district)) {
             include = true;
           }
-        });
+        }
       }
     });
 
@@ -70,8 +71,7 @@ module.exports = class TownHall {
         });
       });
     }
-    let district = townhall.district.split('-')[1];
-    return firebasedb.ref(`sms-users/${townhall.state}/${district}`).once('value');
+    return firebasedb.ref(`sms-users/${townhall.state}/${townhall.district}`).once('value');
   }
 
   print () {

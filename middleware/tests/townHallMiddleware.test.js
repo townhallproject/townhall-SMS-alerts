@@ -40,17 +40,14 @@ describe('Town hall middleware', () => {
     test('it should get an object of states and districts based on a zipcode', () => {
       req.session.zipcode = '98122';
       return townHallHandler.getDistricts(req, res, () => {
-        expect(typeof req.districtObj).toEqual('object');
-        expect(req.districtObj).toEqual({
-          states: ['WA', 'WA'],
-          districts: ['WA-7', 'WA-9'],
-        });
+        expect(typeof req.session.districts).toEqual('object');
+        expect(req.session.districts).toEqual([{'district': '07', 'state': 'WA'}, {'district': '09', 'state': 'WA'}]);
       });
     });
     test('it should return an error if not a zip in the database', () => {
       req.session.zipcode = '11111';
       return townHallHandler.getDistricts(req, res, () => {
-        expect(req.districtObj).toEqual();
+        expect(req.session.districts).toEqual();
       });
     });
   });

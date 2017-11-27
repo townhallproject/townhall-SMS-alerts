@@ -16,32 +16,35 @@ describe('class TownHall', () => {
   describe('includeTownHall method', () => {
 
     test('it should return true if the given district matches the townhall district', () => {
-      let districtObj = {
-        states: ['TX'],
-        districts: ['TX-33'],
-      };
+      let districts = [
+        {
+          state: 'TX',
+          district: '33',
+        },
+      ];
       let newTownHall = new TownHall(testTownHallData);
-      let include = newTownHall.includeTownHall(districtObj);
+      let include = newTownHall.includeTownHall(districts);
       expect(include).toBe(true);
     });
 
     test('it should return false if the given district does not match the townhall district', () => {
-      let districtObj = {
-        states: ['CA'],
-        districts: ['CA-09'],
-      };
+      let districts = [
+        {
+          state: 'CA',
+          district: '09',
+        },
+      ];
       let newTownHall = new TownHall(testTownHallData);
-      let include = newTownHall.includeTownHall(districtObj);
+      let include = newTownHall.includeTownHall(districts);
       expect(include).toBe(false);
     });
 
     test('it should return false if the given district does not match the townhall district', () => {
-      let districtObj = {
+      let districts = [];
 
-      };
       let newTownHall = new TownHall(testTownHallData);
       let failure = function() {
-        newTownHall.includeTownHall(districtObj);
+        newTownHall.includeTownHall(districts);
       };
       expect(failure).toThrow('The requested state not found');
     });

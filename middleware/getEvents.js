@@ -12,7 +12,7 @@ module.exports = function(req, res, next){
     .then((snapshot) => {
       snapshot.forEach((fbtownhall) => {
         let townhall = new TownHall(fbtownhall.val());
-        if (townhall.includeTownHall(req.districtObj)) {
+        if (townhall.includeTownHall(req.session.districts)) {
           townHalls.push(townhall);
         }
 

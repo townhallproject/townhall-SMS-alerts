@@ -21,10 +21,7 @@ townHallLookup.checkZip = function(req, res, next) {
 
 townHallLookup.getDistricts = function(req, res, next) {
   //return state and a district as arrays;
-  let districtObj = {
-    states: [],
-    districts: [],
-  };
+  let districts = [];
 
   if (req.subscribe === true){
     return next();
@@ -35,12 +32,15 @@ townHallLookup.getDistricts = function(req, res, next) {
       return next(new Error('We could not find that zip code.'));
     }
     districtsData.forEach((district) => {
-      districtObj.states.push(district.val().abr);
-      districtObj.districts.push(`${district.val().abr}-${Number(district.val().dis)}`);
+      let districtObj = {
+        state: district.val().abr,
+        district: district.val().dis,
+      };
+      districts.push(districtObj);
     });
-    req.session.districtObj = districtObj;
-    req.districtObj = districtObj;
-    console.log('district object', districtObj);
+    req.session.districts = districts;
+    req.districts = districts;
+    console.log('district array', districts);
     return next();
   }).catch(() => {
     next('We couldnt find that zipcode.');
