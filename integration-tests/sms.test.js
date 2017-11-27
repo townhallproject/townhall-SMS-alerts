@@ -47,7 +47,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual([ 'There are not any upcoming town halls in your area. Send subscribe <zip code> to get reoccuring updates.' ]);
+          expect(res.body.Response.Message).toEqual([ 'There are not any upcoming town halls in your area. Do you want to be notified when there are new events posted?' ]);
         });
 
     });
@@ -62,7 +62,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual([ 'Please send us a zipcode to get upcoming events for your reps.' ]);
+          expect(res.body.Response.Message).toEqual([ 'Hey, if you send us your zip code, we\'ll send you upcoming town halls for your reps.' ]);
         });
     });
 
