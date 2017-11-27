@@ -25,9 +25,9 @@ townHallLookup.getDistricts = function(req, res, next) {
     states: [],
     districts: [],
   };
-  if (req.subscribe === true){
-    return next();
-  }
+  // if (req.subscribe === true){
+  //   return next();
+  // }
   return firebasedb.ref(`zipToDistrict/${req.session.zipcode}`).once('value').then((districtsData) => {
     if (!districtsData.exists()) {
       return next(new Error('We could not find that zip code.'));
