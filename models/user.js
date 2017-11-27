@@ -10,8 +10,6 @@ module.exports = class User {
   }
 
   writeToFirebase(req) {
-    console.log(this);
-    console.log(this.districts);
 
     this.districts.forEach(district => {
       let newPostKey = firebasedb.ref(`sms-users/${req.districtObj.states[0]}/${district}/`).push().key;
