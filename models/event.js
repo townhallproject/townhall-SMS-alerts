@@ -46,11 +46,7 @@ module.exports = class TownHall {
     if (this.iconFlag === 'in-person' || this.meetingType === 'Town Hall') {
       if (moment(this.dateObj).isAfter()) {
         include = true;
-      } else {
-        console.log(this.date, 'in past', this.state, this.district);
       }
-    } else {
-      console.log(this.iconFlag, this.meetingType, 'not townhall', this.state, this.district);
     }
     return include;
   }
@@ -74,7 +70,6 @@ module.exports = class TownHall {
         });
       });
     }
-    console.log(`sms-users/${townhall.state}/${townhall.district}`);
     return firebasedb.ref(`sms-users/${townhall.state}/${townhall.district}`).once('value');
   }
 
