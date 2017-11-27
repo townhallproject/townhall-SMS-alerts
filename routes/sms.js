@@ -9,42 +9,28 @@ const messaging = require('../lib/response');
 
 const townHallHandler = require('./townHallMiddleware');
 const getEvents = require('./getEventsMiddleware');
-
-// const twilioAccountSid = process.env.TWILIO_ACCOUNT_ID;
-// const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
-// const client = require('twilio')(twilioAccountSid, twilioAuthToken);
-// const myTwilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
-// const jsonParser = require('body-parser').json();
+const checkSubscribe = require('./checkSubscribeMiddleware');
+const makeUser = require('./makeUserMiddleware');
 
 smsRouter.post('/sms',
   bodyParser,
+  checkSubscribe,
   townHallHandler.checkZip,
   townHallHandler.getDistricts,
   getEvents,
   (req, res) => {
+    if(req.subscribe){
+      console.log('reached subscribe true call');
+      return makeUser(req, res);
+    }
+    console.log('reached subscribe false call');
     if (req.townHalls.length > 0) {
       req.townHalls.forEach((townhall) => {
         req.twiml.message(townhall.print());
       });
-      req.twiml.message('That\'s all the events we have for your reps');
+      req.twiml.message('That\'s all the events we have for your reps. Do you want to be notified when there are new events posted?');
       return messaging.end(res, req.twiml);
     }
-    messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area.');
-  });
+    messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area. Do you want to be notified when there are new events posted?');
 
-// smsRouter.post('/broadcast',
-//   jsonParser,
-//   (req, res) => {
-//
-//     req.body.users.forEach((user) => {
-//
-//       client.messages.create({
-//         body: req.body.message,
-//         to: user.phoneNumber,
-//         from: myTwilioPhoneNumber,
-//       })
-//         .then((message) => process.stdout.write(message.sid));
-//     });
-//     res.send('Successfully Sent');
-//
-//   });
+  });

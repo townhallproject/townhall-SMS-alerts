@@ -4,6 +4,9 @@ const TownHall = require('../models/event.js');
 const firebasedb = require('../lib/firebaseinit');
 
 module.exports = function(req, res, next){
+  if( req.subscribe === true){
+    return next();
+  }
   let townHalls = [];
   firebasedb.ref(`townHalls`).once('value')
     .then((snapshot) => {
