@@ -2,6 +2,7 @@
 
 const TownHall = require('../event');
 const testTownHallData = require('./mockTownHall');
+const moment = require('moment');
 
 describe('class TownHall', () => {
   describe('townhall constructor', () => {
@@ -44,10 +45,29 @@ describe('class TownHall', () => {
       };
       expect(failure).toThrow('The requested state not found');
     });
+
     test('it should return a message if townhalls exsist', ()=> {
       let newTownHall = new TownHall(testTownHallData);
       let include = newTownHall.print();
       expect(include).toEqual('Marc Veasey is holding a townhall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.');
+    });
+  });
+
+  describe('includeInQueue method', () => {
+
+    test('it should return false if the town hall is not in person and in the past', () => {
+      let newTownHall = new TownHall(testTownHallData);
+      let include = newTownHall.includeInQueue();
+      expect(include).toBe(false);
+    });
+
+    test('it should return true if town hal is in person and in the future', () => {
+
+      let newTownHall = new TownHall(testTownHallData);
+      newTownHall.dateObj = moment().add(7, 'days');
+      newTownHall.iconFlag = 'in-person';
+      let include = newTownHall.includeInQueue();
+      expect(include).toBe(true);
     });
   });
 });

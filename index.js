@@ -8,6 +8,7 @@ const messaging = require('./lib/response');
 const session = require('express-session');
 const reqTwiml = require('./routes/sessionMiddleware');
 const sessionSecret = process.env.SESSION_SECRET;
+const database = require('./database/firebaseListener');
 
 app.use(session({
   secret: sessionSecret,
@@ -26,4 +27,5 @@ app.use((err, req, res, next) => {
 
 server.start(app, PORT)
   .then(console.log)
+  .then(database)
   .catch(console.log);
