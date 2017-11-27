@@ -11,7 +11,7 @@ module.exports = class User {
   writeToFirebase(req) {
     let updates = {};
     req.session.districts.forEach(district => {
-      let path = `sms-users/${district.states}/${district.district}/`;
+      let path = `sms-users/${district.state}/${district.district}/`;
       let newPostKey = firebasedb.ref(path).push().key;
       updates[path + newPostKey] = this;
     });
