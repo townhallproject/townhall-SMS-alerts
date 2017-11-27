@@ -32,4 +32,5 @@ smsRouter.post('/sms',
       return messaging.end(res, req.twiml);
     }
     messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area. Do you want to be notified when there are new events posted?');
+
   });

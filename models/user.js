@@ -10,7 +10,6 @@ module.exports = class User {
   }
 
   writeToFirebase() {
-    console.log('reached write to firebase');
 
     let newPostKey = firebasedb.ref('sms-users').push().key;
 

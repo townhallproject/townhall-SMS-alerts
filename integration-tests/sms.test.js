@@ -18,7 +18,6 @@ beforeAll(() => {
   const session = require('express-session');
   const reqTwiml = require('../routes/sessionMiddleware');
 
-
   app.use(session({
     secret: 'sessionSecret',
     resave: false,

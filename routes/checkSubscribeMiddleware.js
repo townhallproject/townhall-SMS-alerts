@@ -6,5 +6,6 @@ module.exports = function(req, res, next){
     req.subscribe = true;
   }
   console.log('reached subscribe check');
+  console.log('Subscribe: ' ,req.subscribe);
   return next();
 };
