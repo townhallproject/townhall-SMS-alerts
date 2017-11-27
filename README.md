@@ -4,19 +4,19 @@ Motivation: Many people want to know when their member of congress is holding a 
 
 ## Running locally:
   - you will need a twilio number and a tunneling service, and a firebase database
-  ### Setting up twilio
+  #### Setting up twilio
   - tunneling service: follow directions [here](https://www.twilio.com/docs/guides/how-to-set-up-your-node-js-and-express-development-environment#install-ngrok-for-local-development)
-  ### Setting up firebase
+  #### Setting up firebase
   - the two endpoints you need are `townHalls` and `zipToDistrict` 
   - make a new firebase database, add these endpoints and upload JSONS from data folder. 
-  ### ENV 
+  #### in your .env file
   - FIREBASE_PROJECT_ID : project id from firebase, usually your project name
   - FIREBASE_PRIVATE_KEY : private key provided by firebase
   - FIREBASE_CLIENT_ID : provided by firebase, it's the client email
   - PORT : defaults to 3000
   - SESSION_SECRET : for express-session
   
-  ### Running 
+  #### Running 
   - run `npm i`
   - run `npm start` or `nodemon`, will tell you the port you are on
   - open new terminal window, run `./ngrok http [PORT]`
