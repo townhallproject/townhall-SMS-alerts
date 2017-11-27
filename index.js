@@ -9,7 +9,12 @@ const session = require('express-session');
 const reqTwiml = require('./routes/sessionMiddleware');
 const sessionSecret = process.env.SESSION_SECRET;
 
-app.use(session({ secret: sessionSecret }) );
+app.use(session({
+  secret: sessionSecret,
+  name: 'sms cookie',
+  proxy: true,
+  resave: true,
+  saveUninitialized: true}) );
 
 app.use(reqTwiml, smsRouter);
 

@@ -19,7 +19,13 @@ beforeAll(() => {
   const reqTwiml = require('../routes/sessionMiddleware');
 
 
-  app.use(session({ secret: 'anything' }) );
+  app.use(session(({
+    secret: 'sessionSecret',
+    name: 'sms cookie',
+    proxy: true,
+    resave: true,
+    saveUninitialized: true})
+  ) );
 
   app.use(reqTwiml, smsRouter);
 
@@ -61,33 +67,6 @@ describe('SMS', () => {
           expect(res.body.Response.Message).toEqual([ 'Please send us a zipcode to get upcoming events for your reps.' ]);
         });
     });
-
-    // test('should respond with a 200 when req.body is empty but will prompt for a zip code', () => {
-    //   let incoming = {};
-    //
-    //   return request
-    //     .post(url)
-    //     .type('form')
-    //     .send(incoming)
-    //     .parse(xml2jsParser)
-    //     .then(res => {
-    //       expect(res.status).toEqual(200);
-    //       expect(res.body.Response.Message).toEqual([ 'Please send us a zipcode to get upcoming events for your reps' ]);
-    //     });
-    // });
-
-    // test('should respond with a 200 when req.body is not present but will prompt for a zip code', () => {
-    //   //no req.body
-    //
-    //   return request
-    //     .post(url)
-    //     .type('form')
-    //     .parse(xml2jsParser)
-    //     .then(res => {
-    //       expect(res.status).toEqual(200);
-    //       expect(res.body.Response.Message).toEqual([ 'Please send us a zipcode to get upcoming events for your reps' ]);
-    //     });
-    // });
 
     test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code', () => {
       let incoming = {Body: '99999'};

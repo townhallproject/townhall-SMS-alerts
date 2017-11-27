@@ -7,10 +7,6 @@ const townHallLookup = module.exports = {};
 
 townHallLookup.checkZip = function(req, res, next) {
   let incoming = req.body.Body;
-  if(req.subscribe === true){
-    let response = req.body.Body.split(' ');
-    incoming = response[1];
-  }
   if (incoming && incoming.match(zipcodeRegEx)) {
     req.zipcode = incoming.match(zipCleaner)[0];
     console.log(`req zip: `, req.zipcode);
