@@ -13,7 +13,7 @@ module.exports = function(req, res){
       console.log('reached snapshot');
       let newUser = new User (req);
       newUser.writeToFirebase(newUser);
-      req.twiml.message('You have been added for updates in your chosen area code');
+      req.twiml.message('Thanks! We\'ll be in touch!');
       return messaging.end(res, req.twiml);
     });
 };

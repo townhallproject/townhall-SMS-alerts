@@ -28,8 +28,8 @@ smsRouter.post('/sms',
       req.townHalls.forEach((townhall) => {
         req.twiml.message(townhall.print());
       });
-      req.twiml.message('That\'s all the events we have for your reps. Send subscribe <zip code> to get reoccuring updates.');
+      req.twiml.message('That\'s all the events we have for your reps. Do you want to be notified when there are new events posted?');
       return messaging.end(res, req.twiml);
     }
-    messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area. Send subscribe <zip code> to get reoccuring updates.');
+    messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area. Do you want to be notified when there are new events posted?');
   });
