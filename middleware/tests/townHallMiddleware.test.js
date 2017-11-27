@@ -1,6 +1,6 @@
 'use strict';
 require('dotenv').config();
-const townHallHandler = require('../townHallMiddleware');
+const townHallHandler = require('../getDistricts');
 
 let req;
 let res;
