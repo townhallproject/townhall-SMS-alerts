@@ -5,7 +5,6 @@ module.exports = function(req, res, next){
   if(response[0].toLowerCase() === 'yes'){
     req.subscribe = true;
   }
-  console.log('reached subscribe check');
   console.log('Subscribe: ' ,req.subscribe);
   return next();
 };
