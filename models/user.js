@@ -13,10 +13,7 @@ module.exports = class User {
 
     req.session.districtObj.districts.forEach(district => {
       let newPostKey = firebasedb.ref(`sms-users/${req.session.districtObj.states[0]}/${district}/`).push().key;
-
-
       updates[`sms-users/${req.session.districtObj.states[0]}/${district}/` + newPostKey] = this;
-
     });
 
     return firebasedb.ref().update(updates);
