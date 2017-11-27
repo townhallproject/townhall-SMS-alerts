@@ -11,6 +11,7 @@ module.exports = class TownHall {
     this.eventId = fbtownhall.eventId;
     this.address = fbtownhall.address;
     this.meetingType = fbtownhall.meetingType;
+    this.iconFlag = fbtownhall.iconFlag;
     this.rsvpLink = fbtownhall.RSVP || null;
     this.location = fbtownhall.Location || null;
     this.date = fbtownhall.Date;
@@ -28,10 +29,8 @@ module.exports = class TownHall {
     districts.forEach((district) => {
       if (district.state === townhall.state) {
         if (townhall.district === 'Senate') {
-          console.log('senate');
           include = true;
         } else {
-          console.log(townhall.state, district.state, townhall.district, district.district);
           if ((townhall.state === district.state) && (townhall.district === district.district)) {
             include = true;
           }
@@ -47,7 +46,11 @@ module.exports = class TownHall {
     if (this.iconFlag === 'in-person' || this.meetingType === 'Town Hall') {
       if (moment(this.dateObj).isAfter()) {
         include = true;
+      } else {
+        console.log(this.date, 'in past', this.state, this.district);
       }
+    } else {
+      console.log(this.iconFlag, this.meetingType, 'not townhall', this.state, this.district);
     }
     return include;
   }
@@ -71,6 +74,7 @@ module.exports = class TownHall {
         });
       });
     }
+    console.log(`sms-users/${townhall.state}/${townhall.district}`);
     return firebasedb.ref(`sms-users/${townhall.state}/${townhall.district}`).once('value');
   }
 
