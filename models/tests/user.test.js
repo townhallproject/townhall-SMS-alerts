@@ -1,12 +1,11 @@
 'use strict';
 
-const admin = require('firebase-admin');
-const server = require('../../lib/server');
-const app = require('express')();
-const firebasedb = require('../../lib/firebaseinit');
 const User = require('../user');
-const testUserData = require('./mockUser');
-let port = 5000;
+let req;
+
+let firebasemock = {
+  update: jest.fn(() => true),
+};
 
 let resetMocks = () => {
   req = {
@@ -14,19 +13,34 @@ let resetMocks = () => {
     session: {},
   };
 };
-let req = {body:
-  {From:'+1504997866'},
-session: {zipcode: '98122'}};
 
-beforeAll(() => {
-  server.start(app, port);
-});
-afterAll(server.stop);
+describe('User class ', () =>{
+  beforeEach(() => {
+    resetMocks();
+  });
+  describe('write user to firebase ', () => {
 
-describe('class User', () =>{
+    test('it should return the key with users phone number and zipcode', () => {
+      req.body.From = '1504997866';
+      req.session.zipcode = '98122';
+      req.session.districts = [
+        {
+          state: 'CA',
+          district: '09',
+        },
+      ];
+      let newUser = new User(req);
+      let testing = newUser.writeToFirebase(req, firebasemock);
+      expect(testing).toEqual(true);
+    });
+  });
 
-  test('it should return an instance of the User Model', () => {
-    let userObject = new User(req);
-    expect(userObject).toEqual({'phoneNumber': '+1504997866', 'zipcode': '98122'});
+  describe( 'User constructor', () =>{
+    test('it should return an instance of the User Model', () => {
+      req.body.From = '1504997866';
+      req.session.zipcode = '98122';
+      let userObject = new User(req);
+      expect(userObject).toEqual({'phoneNumber':'1504997866','zipcode':'98122'});
+    });
   });
 });

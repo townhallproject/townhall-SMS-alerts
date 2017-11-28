@@ -8,13 +8,14 @@ module.exports = class User {
     this.zipcode = req.session.zipcode;
   }
 
-  writeToFirebase(req) {
+  writeToFirebase(req, firebasemock) {
     let updates = {};
+    let firebaseref = firebasemock || firebasedb.ref();
     req.session.districts.forEach(district => {
       let path = `sms-users/${district.state}/${district.district}/`;
       let newPostKey = firebasedb.ref(path).push().key;
       updates[path + newPostKey] = this;
     });
-    return firebasedb.ref().update(updates);
+    return firebaseref.update(updates);
   }
 };
