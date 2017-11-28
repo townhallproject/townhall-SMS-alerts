@@ -1,5 +1,6 @@
 const firebasedb = require('../lib/firebaseinit');
 const TownHall = require('../models/event');
+const Text = require('../models/texts');
 
 module.exports = function() {
   firebasedb.ref('townHalls').on('child_added', (snapshot) => {
@@ -8,18 +9,15 @@ module.exports = function() {
       townhall.lookupUsers().then((users) => {
         if (users.exists()) {
           users.forEach(user => {
-            console.log(user.val());
             //make a new text to send, add to queue
-            //new Text(user, towhall)
-            //Text.writeToFirebase()
+            let newText = new Text(user.val(), townhall);
+            newText.writeToFirebase();
           });
         }
 
       }).catch(() => {
         // console.log(e);
       });
-
-    } 
-
+    }
   });
 };
