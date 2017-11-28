@@ -2,6 +2,7 @@
 
 const TownHall = require('../event');
 const testTownHallData = require('./mockTownHall');
+const moment = require('moment');
 
 describe('class TownHall', () => {
   describe('townhall constructor', () => {
@@ -15,39 +16,61 @@ describe('class TownHall', () => {
   describe('includeTownHall method', () => {
 
     test('it should return true if the given district matches the townhall district', () => {
-      let districtObj = {
-        states: ['TX'],
-        districts: ['TX-33'],
-      };
+      let districts = [
+        {
+          state: 'TX',
+          district: '33',
+        },
+      ];
       let newTownHall = new TownHall(testTownHallData);
-      let include = newTownHall.includeTownHall(districtObj);
+      let include = newTownHall.includeTownHall(districts);
       expect(include).toBe(true);
     });
 
     test('it should return false if the given district does not match the townhall district', () => {
-      let districtObj = {
-        states: ['CA'],
-        districts: ['CA-09'],
-      };
+      let districts = [
+        {
+          state: 'CA',
+          district: '09',
+        },
+      ];
       let newTownHall = new TownHall(testTownHallData);
-      let include = newTownHall.includeTownHall(districtObj);
+      let include = newTownHall.includeTownHall(districts);
       expect(include).toBe(false);
     });
 
     test('it should return false if the given district does not match the townhall district', () => {
-      let districtObj = {
+      let districts = [];
 
-      };
       let newTownHall = new TownHall(testTownHallData);
       let failure = function() {
-        newTownHall.includeTownHall(districtObj);
+        newTownHall.includeTownHall(districts);
       };
       expect(failure).toThrow('The requested state not found');
     });
+
     test('it should return a message if townhalls exsist', ()=> {
       let newTownHall = new TownHall(testTownHallData);
       let include = newTownHall.print();
       expect(include).toEqual('Marc Veasey is holding a townhall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.');
+    });
+  });
+
+  describe('includeInQueue method', () => {
+
+    test('it should return false if the town hall is not in person and in the past', () => {
+      let newTownHall = new TownHall(testTownHallData);
+      let include = newTownHall.includeInQueue();
+      expect(include).toBe(false);
+    });
+
+    test('it should return true if town hal is in person and in the future', () => {
+
+      let newTownHall = new TownHall(testTownHallData);
+      newTownHall.dateObj = moment().add(7, 'days');
+      newTownHall.iconFlag = 'in-person';
+      let include = newTownHall.includeInQueue();
+      expect(include).toBe(true);
     });
   });
 });

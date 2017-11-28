@@ -12,6 +12,7 @@ module.exports =
   address: 'TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119',
   dateObj: 1510932600000,
   dateString: 'Fri, Nov 17, 2017',
+  district: '33',
   eventId: 'fb_149229795682973',
   eventName: 'Congressman Veasey\'s 5th Annual Job Fair',
   govtrack_id: '412579',
