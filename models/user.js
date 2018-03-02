@@ -18,4 +18,9 @@ module.exports = class User {
     });
     return firebaseref.update(updates);
   }
+
+  deleteFromFirebase(req, firebasemock) {
+    
+    });
+  }
 };

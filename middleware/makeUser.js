@@ -7,7 +7,7 @@ module.exports = function(req, res){
 
   let newUser = new User (req);
   newUser.writeToFirebase(req).then(() => {
-    req.twiml.message(`You have been added for updates in ${req.session.zipcode}`);
+    req.twiml.message(`You have been added for updates in ${req.session.zipcode} To stop these updates, text stop.`);
     return messaging.end(res, req.twiml);
   });
 };

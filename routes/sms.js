@@ -11,6 +11,7 @@ const townHallHandler = require('../middleware/getDistricts');
 const getEvents = require('../middleware/getEvents');
 const checkSubscribe = require('../middleware/checkSubscribe');
 const makeUser = require('../middleware/makeUser');
+const deleteUser = require('../middleware/deleteUser');
 
 smsRouter.post('/sms',
   bodyParser,
@@ -21,6 +22,9 @@ smsRouter.post('/sms',
   (req, res) => {
     if(req.subscribe){
       return makeUser(req, res);
+    }
+    if(req.unsubscribe){
+      return deleteUser(req, res);
     }
     if (req.townHalls.length > 0) {
       req.townHalls.forEach((townhall) => {
