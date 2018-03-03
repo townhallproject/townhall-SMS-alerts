@@ -5,8 +5,8 @@ module.exports = function(req, res, next){
   if (response[0].toLowerCase() === 'y'){
     req.subscribe = true;
   }
-  if (response[0].toLowerCase() === 's'){
-    req.unsubsribe = true;
+  if (response[0].toLowerCase() === 'u'){
+    req.unsubscribe = true;
   }
   console.log('Subscribe: ' ,req.subscribe);
   console.log('Unsubscribe: ', req.unsubscribe);

@@ -10,17 +10,24 @@ module.exports = class User {
 
   writeToFirebase(req, firebasemock) {
     let updates = {};
+    let user = {};
+
+    let userPath = 'sms-users/all-users/';
+    let userPostKey = `${this.phoneNumber}`;
+
     let firebaseref = firebasemock || firebasedb.ref();
     req.session.districts.forEach(district => {
       let path = `sms-users/${district.state}/${district.district}/`;
       let newPostKey = `${this.phoneNumber}-${this.zipcode}`;
       updates[path + newPostKey] = this;
     });
+
+    user[userPath + userPostKey] = this.zipcode;
+
+    firebaseref.update(user);
     return firebaseref.update(updates);
   }
 
   deleteFromFirebase(req, firebasemock) {
-    
-    });
   }
 };
