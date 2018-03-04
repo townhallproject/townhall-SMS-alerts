@@ -5,44 +5,30 @@ const firebasedb = require('../lib/firebaseinit');
 
 const deleteFromFirebase = function(req, disArray) {
 
-  console.log('reached 1');
-
   let firebaseref = firebasedb.ref();
   disArray.forEach(district => {
-    console.log('reached');
     let disPath = `sms-users/${district.state}/${district.district}/${req.body.From}`;
     firebaseref.child(disPath).remove();
   });
 
   return firebaseref.child(`sms-users/all-users/${req.body.From}`).remove();
-  
+
 };
 
 module.exports = function(req, res){
 
-  let zipcodes;
   let districts = [];
 
-  firebasedb.ref(`sms-users/all-users/${req.body.From}`).child('zipcodes').once('value', function(snapshot){
-    zipcodes = snapshot.val();
-    console.log('zipcodes: ', zipcodes);
+  firebasedb.ref(`sms-users/all-users/${req.body.From}`).child('districts').once('value', function(snapshot){
+    districts = snapshot.val();
+    console.log('districts: ', districts);
   })
     .then( () => {
-      zipcodes.forEach(zip => {
-        firebasedb.ref(`zipToDistrict/${zip}`).once('value').then(districtData => {
-          districtData.forEach(district => {
-            let districtObj = {
-              state: district.val().abr,
-              district: district.val().dis,
-            };
-            districts.push(districtObj);
-          });
-          console.log('districts: ', districts);
-        })
-          .then( () => {
-            deleteFromFirebase(req, districts);
-          });
-      });
+      deleteFromFirebase(req, districts);
+    })
+    .then( () => {
+      req.twiml.message('You have been removed from receiving updates for all districts.  If you wish to receive updates again, simply text the area code where you would like to receive updates and resubscribe.');
+      return messaging.end(res, req.twiml);
     });
 
 };

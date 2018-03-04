@@ -11,7 +11,7 @@ module.exports = class User {
   writeToFirebase(req, firebasemock) {
     let updates = {};
     let user = {};
-    let userZips = req.userZips || {zipcodes: [this.zipcode]};
+    let userDistricts = req.userDistricts || {districts: []};
 
     let userPath = 'sms-users/all-users/';
     let userPostKey = `${this.phoneNumber}`;
@@ -21,13 +21,12 @@ module.exports = class User {
       let path = `sms-users/${district.state}/${district.district}/`;
       let newPostKey = `${this.phoneNumber}`;
       updates[path + newPostKey] = this;
+
+      userDistricts.districts.push(district);
+      
     });
 
-    if(req.userZips){
-      userZips.zipcodes.push(this.zipcode);
-    }
-
-    user[userPath + userPostKey] = userZips;
+    user[userPath + userPostKey] = userDistricts;
 
     firebaseref.update(user);
     return firebaseref.update(updates);
