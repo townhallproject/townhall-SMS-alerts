@@ -8,14 +8,14 @@ module.exports = function(req, res){
 
   firebasedb.ref(`sms-users/all-users/`).child(`${req.body.From}`).once('value', function(snapshot){
     if(snapshot.exists()){
-      console.log('snap: ', snapshot);
+      console.log('snap: ', snapshot.val());
+      req.userZips = snapshot.val();
     } else {
-      console.log('no exist');
+      console.log('user does not exist');
     }
 
     return makeUser(req, res);
 
   });
-
 
 };
