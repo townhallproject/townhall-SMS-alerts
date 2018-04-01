@@ -2,6 +2,26 @@
 
 Motivation: Many people want to know when their member of congress is holding a town hall. Currently they can access this information by going to townhallproject.com and by signing up for email alerts. We want to make this information even more readily available by allowing people to access it with their phones via SMS.
 
+## Running locally:
+  - you will need a twilio number and a tunneling service, and a firebase database
+  #### Setting up twilio
+  - tunneling service: follow directions [here](https://www.twilio.com/docs/guides/how-to-set-up-your-node-js-and-express-development-environment#install-ngrok-for-local-development)
+  #### Setting up firebase
+  - the two endpoints you need are `townHalls` and `zipToDistrict` 
+  - make a new firebase database, add these endpoints and upload JSONS from data folder. 
+  #### in your .env file
+  - FIREBASE_PROJECT_ID : project id from firebase, usually your project name
+  - FIREBASE_PRIVATE_KEY : private key provided by firebase
+  - FIREBASE_CLIENT_ID : provided by firebase, it's the client email
+  - PORT : defaults to 3000
+  - SESSION_SECRET : for express-session
+  
+  #### Running 
+  - run `npm i`
+  - run `npm start` or `nodemon`, will tell you the port you are on
+  - open new terminal window, run `./ngrok http [PORT]`
+  - text your twilio number
+
 ## MVP:
 User will text a number their zip code, in response they will get all upcoming events in their district (including Senate events). The event information will include the Member of congress, the title, and a link to directions.
 
