@@ -18,9 +18,13 @@ describe('Text class', () => {
       };
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
-      expect(newtext).toEqual({'body': 'Marc Veasey is holding a townhall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.', 'eventId': 'fb_149229795682973', 'phoneNumber': 'number'});
+      expect(newtext).toEqual({
+        'body': ' Marc Veasey is holding a Town Hall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.', 'eventId': 'fb_149229795682973', 'phoneNumber': 'number',    
+      });
     });
+
   });
+
   describe('Write to firebase', () => {
     test('it saves a text to the sms-queue', () => {
       let user = {

@@ -6,33 +6,34 @@ const bodyParser = require('body-parser').urlencoded({
 const smsRouter = module.exports = express.Router();
 
 const messaging = require('../lib/response');
+const scripts = require('../lib/scripts');
 
-const townHallHandler = require('../middleware/getDistricts');
+const townHallHandler = require('../middleware/townHallLookup');
+const getLatLng = require('../middleware/getLatLng');
 const getEvents = require('../middleware/getEvents');
 const checkSubscribe = require('../middleware/checkSubscribe');
-const deleteUser = require('../middleware/deleteUser');
-const subscribeActions = require('../middleware/subscribeActions');
+
+const storage = {}
 
 smsRouter.post('/sms',
   bodyParser,
   checkSubscribe,
   townHallHandler.checkZip,
   townHallHandler.getDistricts,
+  getLatLng,
   getEvents,
   (req, res) => {
-    if(req.subscribe){
-      return subscribeActions(req, res);
-    }
-    if(req.unsubscribe){
-      return deleteUser(req, res);
-    }
-    if (req.townHalls.length > 0) {
-      req.townHalls.forEach((townhall) => {
+    if (req.session.townHalls.length > 0) {
+
+      req.session.townHalls.forEach((townhall) => {
         req.twiml.message(townhall.print());
       });
-      req.twiml.message('That\'s all the events we have for your reps. Do you want to be notified when there are new events posted?');
-      return messaging.end(res, req.twiml);
+      req.session.townHalls = [];
+      req.twiml.message('That\'s all the events we have for your reps. Do you want sign up to get a text when your rep is holding a town hall?');
+    } else {
+      req.twiml.message(scripts.noEvents);
     }
-    messaging.sendAndWrite(req, res, 'There are not any upcoming town halls in your area. Do you want to be notified when there are new events posted?');
+    req.session.doyouwanttosignup = true;
+    return messaging.end(res, req.twiml)
 
   });

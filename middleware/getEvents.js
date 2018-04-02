@@ -4,20 +4,17 @@ const TownHall = require('../models/event.js');
 const firebasedb = require('../lib/firebaseinit');
 
 module.exports = function(req, res, next){
-  if( req.subscribe === true || req.unsubscribe === true){
-    return next();
-  }
   let townHalls = [];
   firebasedb.ref(`townHalls`).once('value')
     .then((snapshot) => {
       snapshot.forEach((fbtownhall) => {
         let townhall = new TownHall(fbtownhall.val());
-        if (townhall.includeTownHall(req.session.districts)) {
+        if (townhall.includeTownHall(req.session.districts, req.session.location)) {
           townHalls.push(townhall);
         }
 
       });
-      req.townHalls = townHalls;
+      req.session.townHalls = townHalls;
       return next();
     })
     .catch((e) => {

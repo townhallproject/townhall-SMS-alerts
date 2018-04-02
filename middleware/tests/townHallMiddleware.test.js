@@ -1,6 +1,7 @@
 'use strict';
 require('dotenv').config();
-const townHallHandler = require('../getDistricts');
+const scripts = require('../../lib/scripts');
+const townHallHandler = require('../townHallLookup');
 
 let req;
 let res;
@@ -9,6 +10,9 @@ let resetMocks = () => {
   req = {
     body: {},
     session: {},
+    twiml: {
+      message: jest.fn(),
+    },
   };
   res = {};
   let resWriteHead = jest.fn();
@@ -33,7 +37,7 @@ describe('Town hall middleware', () => {
       req.body.Body = 'bbsdfd';
       let mockNext = jest.fn();
       townHallHandler.checkZip(req, res, mockNext);
-      expect(mockNext.mock.calls[0][0].message).toEqual('Hey, if you send us your zip code, we\'ll send you upcoming town halls for your reps.');
+      expect(req.twiml.message.mock.calls[0][0]).toEqual(scripts.default);
     });
   });
   describe('get districts', () => {

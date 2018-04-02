@@ -23,7 +23,7 @@ module.exports =
   link: 'https://www.facebook.com/events/149229795682973/',
   linkName: 'Facebook Link',
   lng: -97.28859659999999,
-  meetingType: 'Other',
+  meetingType: 'Town Hall',
   state: 'TX',
   stateName: 'Texas',
   timeEnd24: '13:00:00',
