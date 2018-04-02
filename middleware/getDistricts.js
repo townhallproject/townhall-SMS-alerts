@@ -28,7 +28,7 @@ townHallLookup.getDistricts = function(req, res, next) {
     .once('value')
     .then((districtsData) => {
       if (!districtsData.exists()) {
-        return next(new Error('We could not find that zip code.'));
+        return next(new Error('We could not find that zip code in our database.'));
       }
       districtsData.forEach((district) => {
         let districtObj = {

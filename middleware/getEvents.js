@@ -9,7 +9,7 @@ module.exports = function(req, res, next){
     .then((snapshot) => {
       snapshot.forEach((fbtownhall) => {
         let townhall = new TownHall(fbtownhall.val());
-        if (townhall.includeTownHall(req.session.districts)) {
+        if (townhall.includeTownHall(req.session.districts, req.session.location)) {
           townHalls.push(townhall);
         }
 

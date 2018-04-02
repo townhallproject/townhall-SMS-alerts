@@ -25,8 +25,10 @@
     "express-session": "^1.15.6",
     "express-sessions": "^1.0.6",
     "firebase-admin": "^5.5.0",
+    "geo-distance": "^0.1.2",
     "moment": "^2.19.2",
     "request": "^2.83.0",
+    "spherical-geometry-js": "^1.0.1",
     "twilio": "^3.9.3"
   },
   "devDependencies": {

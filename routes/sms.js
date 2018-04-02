@@ -9,6 +9,7 @@ const messaging = require('../lib/response');
 const scripts = require('../lib/scripts');
 
 const townHallHandler = require('../middleware/getDistricts');
+const getLatLng = require('../middleware/getLatLng');
 const getEvents = require('../middleware/getEvents');
 const checkSubscribe = require('../middleware/checkSubscribe');
 
@@ -19,6 +20,7 @@ smsRouter.post('/sms',
   checkSubscribe,
   townHallHandler.checkZip,
   townHallHandler.getDistricts,
+  getLatLng,
   getEvents,
   (req, res) => {
     if (req.session.townHalls.length > 0) {
