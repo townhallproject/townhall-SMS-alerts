@@ -4,9 +4,6 @@ const TownHall = require('../models/event.js');
 const firebasedb = require('../lib/firebaseinit');
 
 module.exports = function(req, res, next){
-  if( req.subscribe === true || req.unsubscribe === true){
-    return next();
-  }
   let townHalls = [];
   firebasedb.ref(`townHalls`).once('value')
     .then((snapshot) => {
@@ -17,7 +14,7 @@ module.exports = function(req, res, next){
         }
 
       });
-      req.townHalls = townHalls;
+      req.session.townHalls = townHalls;
       return next();
     })
     .catch((e) => {

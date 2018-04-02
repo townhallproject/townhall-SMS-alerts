@@ -19,10 +19,10 @@ app.use(session({
 
 app.use(reqTwiml, smsRouter);
 
-app.use((err, req, res, next) => {
-  console.log('err', err);
+app.use((err, req, res) => {
+  // console.log('err', err);
   messaging.sendAndWrite(req, res, err.message);
-  next();
+  // next();
 });
 
 server.start(app, PORT)

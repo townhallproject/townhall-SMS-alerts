@@ -1,6 +1,7 @@
 'use strict';
 
 const messaging = require('../lib/response');
+const scripts = require('../lib/scripts');
 const firebasedb = require('../lib/firebaseinit');
 
 const deleteFromFirebase = function(req, disArray) {
@@ -21,13 +22,12 @@ module.exports = function(req, res){
 
   firebasedb.ref(`sms-users/all-users/${req.body.From}`).child('districts').once('value', function(snapshot){
     districts = snapshot.val();
-    console.log('districts: ', districts);
   })
     .then( () => {
       deleteFromFirebase(req, districts);
     })
     .then( () => {
-      req.twiml.message('You have been removed from receiving updates for all districts.  If you wish to receive updates again, simply text the area code where you would like to receive updates and resubscribe.');
+      req.twiml.message(scripts.unSubscribe);
       return messaging.end(res, req.twiml);
     });
 
