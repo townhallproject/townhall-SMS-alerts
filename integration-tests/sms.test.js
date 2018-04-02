@@ -3,6 +3,8 @@
 const request = require('superagent');
 const expect = require('expect');
 const server = require('../lib/server');
+const scripts = require('../lib/scripts');
+
 const xml2jsParser = require('superagent-xml2jsparser');
 let url;
 
@@ -46,7 +48,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual([ 'There are not any upcoming town halls in your area. Do you want to be notified when there are new events posted?' ]);
+          expect(res.body.Response.Message).toEqual([scripts.noEvents ]);
         });
 
     });
@@ -61,7 +63,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual([ 'Hey, if you send us your zip code, we\'ll send you upcoming town halls for your reps.' ]);
+          expect(res.body.Response.Message).toEqual([scripts.default]);
         });
     });
 
@@ -75,7 +77,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual(['We could not find that zip code.']);
+          expect(res.body.Response.Message).toEqual([scripts.zipLookupFailed]);
         });
     });
     test('should return message from an array', ()=>{

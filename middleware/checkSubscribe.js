@@ -1,14 +1,25 @@
 'use strict';
+const messaging = require('../lib/response');
+const scripts = require('../lib/scripts');
+
+const subscribeActions = require('../middleware/subscribeActions');
+const deleteUser = require('../middleware/deleteUser');
 
 module.exports = function(req, res, next){
   let response = req.body.Body;
-  if (response[0].toLowerCase() === 'y'){
-    req.subscribe = true;
+  if ((response.toLowerCase().substring(0, 2) === 'pa')) {
+    deleteUser(req, res);
+    return;
   }
-  if ( (response[0].toLowerCase() === 'p') && (response[1].toLowerCase() === 'a') ){
-    req.unsubscribe = true;
+  if (req.session.doyouwanttosignup) {
+    req.session.doyouwanttosignup = null;
+    if (response[0].toLowerCase() === 'y') {
+      subscribeActions(req, res);
+    } else {
+      req.twiml.message(scripts.noSubscribe);
+      return messaging.end(res, req.twiml)
+    }
+    return
   }
-  console.log('Subscribe: ' ,req.subscribe);
-  console.log('Unsubscribe: ', req.unsubscribe);
   return next();
 };
