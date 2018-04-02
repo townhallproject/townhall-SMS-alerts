@@ -4,7 +4,7 @@ const TownHall = require('../models/event.js');
 const firebasedb = require('../lib/firebaseinit');
 
 module.exports = function(req, res, next){
-  if( req.subscribe === true){
+  if( req.subscribe === true || req.unsubscribe === true){
     return next();
   }
   let townHalls = [];

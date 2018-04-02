@@ -7,7 +7,7 @@ const townHallLookup = module.exports = {};
 
 townHallLookup.checkZip = function(req, res, next) {
   let incoming = req.body.Body;
-  if (req.subscribe === true){
+  if (req.subscribe === true || req.unsubscribe === true){
     return next();
   }
   if (incoming && incoming.match(zipcodeRegEx)) {
@@ -23,7 +23,7 @@ townHallLookup.getDistricts = function(req, res, next) {
   //return state and a district as arrays;
   let districts = [];
 
-  if (req.subscribe === true){
+  if (req.subscribe === true || req.unsubscribe === true){
     return next();
   }
 

@@ -10,7 +10,8 @@ const messaging = require('../lib/response');
 const townHallHandler = require('../middleware/getDistricts');
 const getEvents = require('../middleware/getEvents');
 const checkSubscribe = require('../middleware/checkSubscribe');
-const makeUser = require('../middleware/makeUser');
+const deleteUser = require('../middleware/deleteUser');
+const subscribeActions = require('../middleware/subscribeActions');
 
 smsRouter.post('/sms',
   bodyParser,
@@ -20,7 +21,10 @@ smsRouter.post('/sms',
   getEvents,
   (req, res) => {
     if(req.subscribe){
-      return makeUser(req, res);
+      return subscribeActions(req, res);
+    }
+    if(req.unsubscribe){
+      return deleteUser(req, res);
     }
     if (req.townHalls.length > 0) {
       req.townHalls.forEach((townhall) => {
