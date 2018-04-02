@@ -22,8 +22,12 @@ describe('class TownHall', () => {
           district: '33',
         },
       ];
+      let location = {
+        lat: 32,
+        lng: -97,
+      };
       let newTownHall = new TownHall(testTownHallData);
-      let include = newTownHall.includeTownHall(districts);
+      let include = newTownHall.includeTownHall(districts, location);
       expect(include).toBe(true);
     });
 
@@ -34,17 +38,25 @@ describe('class TownHall', () => {
           district: '09',
         },
       ];
+      let location = {
+        lat: 32,
+        lng: -97,
+      };
+  
       let newTownHall = new TownHall(testTownHallData);
-      let include = newTownHall.includeTownHall(districts);
+      let include = newTownHall.includeTownHall(districts, location);
       expect(include).toBe(false);
     });
 
     test('it should return false if the given district does not match the townhall district', () => {
       let districts = [];
-
+      let location = {
+        lat: 32,
+        lng: -97,
+      };
       let newTownHall = new TownHall(testTownHallData);
       let failure = function() {
-        newTownHall.includeTownHall(districts);
+        newTownHall.includeTownHall(districts, location);
       };
       expect(failure).toThrow('The requested state not found');
     });
@@ -52,7 +64,9 @@ describe('class TownHall', () => {
     test('it should return a message if townhalls exsist', ()=> {
       let newTownHall = new TownHall(testTownHallData);
       let include = newTownHall.print();
-      expect(include).toEqual('Marc Veasey is holding a townhall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.');
+      expect(include).toEqual(
+        ' Marc Veasey is holding a Town Hall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.'      
+      );
     });
   });
 

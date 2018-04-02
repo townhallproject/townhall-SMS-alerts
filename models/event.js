@@ -37,9 +37,9 @@ module.exports = class TownHall {
     }
 
     if (!lodash.includes(includeEventType, townhall.meetingType) && !(lodash.includes(includeIconFlags, townhall.iconFlag))){
-      console.log(townhall.meetingType, townhall.iconFlag)
       return false;
     }
+    
     let curLocation = new geometry.LatLng(Number(location.lat), Number(location.lng));
     districts.forEach((district) => {
       if (district.state === townhall.state) {

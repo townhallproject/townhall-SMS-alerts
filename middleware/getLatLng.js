@@ -1,5 +1,6 @@
 'use strict';
 const firebasedb = require('../lib/firebaseinit');
+const scripts = require('../lib/scripts');
 
 module.exports = function(req, res, next) {
   //return state and a district as arrays;
@@ -14,6 +15,6 @@ module.exports = function(req, res, next) {
       req.session.location = { lat:latlng.LAT, lng: latlng.LNG };
       return next();
     }).catch(() => {
-      next('We couldnt locate that zipcode.');
+      next(scripts.zipLookupFailed);
     });
 };

@@ -8,7 +8,7 @@ const smsRouter = module.exports = express.Router();
 const messaging = require('../lib/response');
 const scripts = require('../lib/scripts');
 
-const townHallHandler = require('../middleware/getDistricts');
+const townHallHandler = require('../middleware/townHallLookup');
 const getLatLng = require('../middleware/getLatLng');
 const getEvents = require('../middleware/getEvents');
 const checkSubscribe = require('../middleware/checkSubscribe');

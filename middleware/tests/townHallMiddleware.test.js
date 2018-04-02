@@ -1,7 +1,7 @@
 'use strict';
 require('dotenv').config();
 const scripts = require('../../lib/scripts');
-const townHallHandler = require('../getDistricts');
+const townHallHandler = require('../townHallLookup');
 
 let req;
 let res;

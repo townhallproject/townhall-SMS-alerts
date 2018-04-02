@@ -28,7 +28,7 @@ townHallLookup.getDistricts = function(req, res, next) {
     .once('value')
     .then((districtsData) => {
       if (!districtsData.exists()) {
-        return next(new Error('We could not find that zip code in our database.'));
+        return next(new Error(scripts.zipLookupFailed));
       }
       districtsData.forEach((district) => {
         let districtObj = {
@@ -40,6 +40,6 @@ townHallLookup.getDistricts = function(req, res, next) {
       req.session.districts = districts;
       return next();
     }).catch(() => {
-      next('We couldnt find that zipcode.');
+      next(scripts.zipLookupFailed);
     });
 };

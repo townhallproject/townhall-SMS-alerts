@@ -77,7 +77,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual(['We could not find that zip code.']);
+          expect(res.body.Response.Message).toEqual([scripts.zipLookupFailed]);
         });
     });
     test('should return message from an array', ()=>{
