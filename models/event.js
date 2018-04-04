@@ -68,7 +68,7 @@ module.exports = class TownHall {
 
   includeInQueue() {
     let include = false;
-    if (!lodash.includes(includeEventType, townhall.meetingType) && !(lodash.includes(includeIconFlags, townhall.iconFlag))) {
+    if (!lodash.includes(includeEventType, this.meetingType) && !(lodash.includes(includeIconFlags, this.iconFlag))) {
       return false;
     }
     if (moment(this.dateObj).isAfter()) {
