@@ -54,7 +54,7 @@ describe('SMS', () => {
         .parse(xml2jsParser)
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.Response.Message).toEqual([scripts.noEvents ]);
+          expect(Array.isArray(res.body.Response.Message)).toBe(true);
         });
 
     });
