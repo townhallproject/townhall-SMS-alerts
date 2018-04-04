@@ -13,7 +13,6 @@ module.exports = function(req, res, next){
         if (townhall.includeTownHall(req.districts, req.location)) {
           townHalls.push(townhall);
         }
-
       });
       req.townHalls = townHalls;
       return next();
