@@ -1,11 +1,9 @@
 'use strict';
-
 const messaging = require('../lib/response');
 const scripts = require('../lib/scripts');
 const firebasedb = require('../lib/firebaseinit');
 
 const deleteFromFirebase = function(req, disArray) {
-
   let firebaseref = firebasedb.ref();
   disArray.forEach(district => {
     let disPath = `sms-users/${district.state}/${district.district}/${req.body.From}`;
@@ -21,13 +19,21 @@ module.exports = function(req, res){
   let districts = [];
 
   firebasedb.ref(`sms-users/all-users/${req.body.From}`).child('districts').once('value', function(snapshot){
+    if (!snapshot.exists()){
+      return Promise.reject('You are not subscribed to alerts');
+    }
     districts = snapshot.val();
+
   })
     .then( () => {
       deleteFromFirebase(req, districts);
     })
     .then( () => {
       req.twiml.message(scripts.unSubscribe);
+      return messaging.end(res, req.twiml);
+    })
+    .catch(err => {
+      req.twiml.message(err);
       return messaging.end(res, req.twiml);
     });
 

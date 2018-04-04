@@ -5,6 +5,8 @@ const expect = require('expect');
 const server = require('../lib/server');
 const scripts = require('../lib/scripts');
 
+const User = require('../models/user');
+
 const xml2jsParser = require('superagent-xml2jsparser');
 let url;
 
@@ -17,14 +19,7 @@ beforeAll(() => {
   const smsRouter = require('../routes/sms');
   const app = express();
   const messaging = require('../lib/response');
-  const session = require('express-session');
   const reqTwiml = require('../middleware/session');
-
-  app.use(session({
-    secret: 'sessionSecret',
-    resave: false,
-    saveUninitialized: false,
-  }));
 
   app.use(reqTwiml, smsRouter);
 
@@ -35,12 +30,23 @@ beforeAll(() => {
   });
   server.start(app, port);
 });
+
+afterEach(() => {
+  const req = {
+    body: {
+      From: '+1111111111',
+    },
+  };
+  new User(req).deleteFromCache();
+});
+
 afterAll(server.stop);
+
 
 describe('SMS', () => {
   describe('POST /sms', () => {
     test('should respond with a 200 when there is an incoming zipcode', () => {
-      let incoming = {Body: '98122'};
+      let incoming = {Body: '98122', From: '+1111111111'};
       return request
         .post(url)
         .type('form')
@@ -54,7 +60,7 @@ describe('SMS', () => {
     });
 
     test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code.', () => {
-      let incoming = {Body: 'thisshouldfail'};
+      let incoming = { Body: 'thisshouldfail', From: '+1111111111'};
 
       return request
         .post(url)
@@ -68,7 +74,7 @@ describe('SMS', () => {
     });
 
     test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code', () => {
-      let incoming = {Body: '99999'};
+      let incoming = { Body: '99999', From: '+1111111111'};
 
       return request
         .post(url)
@@ -81,7 +87,7 @@ describe('SMS', () => {
         });
     });
     test('should return message from an array', ()=>{
-      let incoming = {Body : '27278'};
+      let incoming = { Body: '27278', From: '+1111111111'};
 
       return request
         .post(url)

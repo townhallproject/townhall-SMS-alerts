@@ -1,5 +1,4 @@
 'use strict';
-
 const makeUser = require('../middleware/makeUser');
 const firebasedb = require('../lib/firebaseinit');
 
