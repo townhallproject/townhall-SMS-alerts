@@ -10,7 +10,6 @@ let firebasemock = {
 let resetMocks = () => {
   req = {
     body: {},
-    session: {},
   };
 };
 
@@ -22,8 +21,8 @@ describe('User class ', () =>{
 
     test('it should return the key with users phone number and zipcode', () => {
       req.body.From = '1504997866';
-      req.session.zipcode = '98122';
-      req.session.districts = [
+      req.zipcode = '98122';
+      req.districts = [
         {
           state: 'CA',
           district: '09',
@@ -38,7 +37,7 @@ describe('User class ', () =>{
   describe( 'User constructor', () =>{
     test('it should return an instance of the User Model', () => {
       req.body.From = '1504997866';
-      req.session.zipcode = '98122';
+      req.zipcode = '98122';
       let userObject = new User(req);
       expect(userObject).toEqual({'phoneNumber':'1504997866','zipcode':'98122'});
     });

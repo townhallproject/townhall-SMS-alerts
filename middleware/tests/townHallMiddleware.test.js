@@ -9,7 +9,6 @@ let res;
 let resetMocks = () => {
   req = {
     body: {},
-    session: {},
     twiml: {
       message: jest.fn(),
     },
@@ -29,12 +28,14 @@ describe('Town hall middleware', () => {
   describe('check zip', () => {
     test('it verifies a zip code', () => {
       req.body.Body = '98122-4444';
+      req.body.From = '+1111111111';
       townHallHandler.checkZip(req, null, () => {
-        expect(req.session.zipcode).toEqual('98122');
+        expect(req.zipcode).toEqual('98122');
       });
     });
     test('it sends a message if not a zip', () => {
       req.body.Body = 'bbsdfd';
+      req.body.From = '+1111111111';
       let mockNext = jest.fn();
       townHallHandler.checkZip(req, res, mockNext);
       expect(req.twiml.message.mock.calls[0][0]).toEqual(scripts.default);
@@ -42,16 +43,18 @@ describe('Town hall middleware', () => {
   });
   describe('get districts', () => {
     test('it should get an object of states and districts based on a zipcode', () => {
-      req.session.zipcode = '98122';
+      req.zipcode = '98122';
+      req.body.From = '+1111111111';
       return townHallHandler.getDistricts(req, res, () => {
-        expect(typeof req.session.districts).toEqual('object');
-        expect(req.session.districts).toEqual([{'district': '07', 'state': 'WA'}, {'district': '09', 'state': 'WA'}]);
+        expect(typeof req.districts).toEqual('object');
+        expect(req.districts).toEqual([{'district': '07', 'state': 'WA'}, {'district': '09', 'state': 'WA'}]);
       });
     });
     test('it should return an error if not a zip in the database', () => {
-      req.session.zipcode = '11111';
+      req.zipcode = '11111';
+      req.body.From = '+1111111111';
       return townHallHandler.getDistricts(req, res, () => {
-        expect(req.session.districts).toEqual();
+        expect(req.districts).toEqual();
       });
     });
   });
