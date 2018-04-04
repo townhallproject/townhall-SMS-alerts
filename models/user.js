@@ -5,7 +5,7 @@ const firebasedb = require('../lib/firebaseinit');
 module.exports = class User {
   constructor (req){
     this.phoneNumber = req.body.From;
-    this.zipcode = req.session.zipcode;
+    this.zipcode = req.zipcode;
   }
 
   writeToFirebase(req, firebasemock) {
@@ -17,7 +17,10 @@ module.exports = class User {
     let userPostKey = `${this.phoneNumber}`;
 
     let firebaseref = firebasemock || firebasedb.ref();
-    req.session.districts.forEach(district => {
+    if (!req.districts){
+      return Promise.reject('no districts');
+    }
+    req.districts.forEach(district => {
       let path = `sms-users/${district.state}/${district.district}/`;
       let newPostKey = `${this.phoneNumber}`;
       updates[path + newPostKey] = this;
@@ -25,11 +28,29 @@ module.exports = class User {
       userDistricts.districts.push(district);
       
     });
-
     user[userPath + userPostKey] = userDistricts;
 
     firebaseref.update(user);
     return firebaseref.update(updates);
   }
 
+  updateCache(req){
+    let userPath = 'sms-users/cached-users';
+    if (req.districts) {
+      let userDistricts = req.userDistricts || { districts: [] };
+      req.districts.forEach(district => {
+        userDistricts.districts.push(district);
+
+      });
+      this.districts = userDistricts.districts;
+    } 
+    this.hasbeenasked = req.hasbeenasked || false;
+    firebasedb.ref(`${userPath}/${this.phoneNumber}`).update(this);
+  }
+
+  deleteFromCache() {
+    let userPath = 'sms-users/cached-users';
+    const ref = firebasedb.ref(`${userPath}/${this.phoneNumber}`);
+    ref.remove();
+  }
 };

@@ -27,6 +27,7 @@ describe('class TownHall', () => {
         lng: -97,
       };
       let newTownHall = new TownHall(testTownHallData);
+      newTownHall.dateObj = moment().add(7, 'days');
       let include = newTownHall.includeTownHall(districts, location);
       expect(include).toBe(true);
     });

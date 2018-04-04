@@ -3,6 +3,8 @@ const firebasedb = require('../lib/firebaseinit');
 const scripts = require('../lib/scripts');
 const messaging = require('../lib/response');
 
+const User = require('../models/user');
+
 const zipcodeRegEx = /^(\d{5}-\d{4}|\d{5}|\d{9})$|^([a-zA-Z]\d[a-zA-Z] \d[a-zA-Z]\d)$/g;
 const zipCleaner = /^\d{5}/g;
 
@@ -12,8 +14,8 @@ townHallLookup.checkZip = function(req, res, next) {
   let incoming = req.body.Body;
 
   if (incoming && incoming.match(zipcodeRegEx)) {
-    req.session.zipcode = incoming.match(zipCleaner)[0];
-    console.log(`req zip: `, req.session.zipcode);
+    req.zipcode = incoming.match(zipCleaner)[0];
+    new User(req).updateCache(req);
     return next();
   }
   req.twiml.message(scripts.default);
@@ -23,8 +25,7 @@ townHallLookup.checkZip = function(req, res, next) {
 townHallLookup.getDistricts = function(req, res, next) {
   //return state and a district as arrays;
   let districts = [];
-  console.log('getting districts', req.session.zipcode);
-  return firebasedb.ref(`zipToDistrict/${req.session.zipcode}`)
+  return firebasedb.ref(`zipToDistrict/${req.zipcode}`)
     .once('value')
     .then((districtsData) => {
       if (!districtsData.exists()) {
@@ -37,7 +38,8 @@ townHallLookup.getDistricts = function(req, res, next) {
         };
         districts.push(districtObj);
       });
-      req.session.districts = districts;
+      req.districts = districts;
+      new User(req).updateCache(req);
       return next();
     }).catch(() => {
       next(scripts.zipLookupFailed);

@@ -39,7 +39,9 @@ module.exports = class TownHall {
     if (!lodash.includes(includeEventType, townhall.meetingType) && !(lodash.includes(includeIconFlags, townhall.iconFlag))){
       return false;
     }
-    
+    if (!moment(this.dateObj).isAfter()){
+      return false;
+    }
     let curLocation = new geometry.LatLng(Number(location.lat), Number(location.lng));
     districts.forEach((district) => {
       if (district.state === townhall.state) {
@@ -66,10 +68,11 @@ module.exports = class TownHall {
 
   includeInQueue() {
     let include = false;
-    if (this.iconFlag === 'in-person' || this.meetingType === 'Town Hall') {
-      if (moment(this.dateObj).isAfter()) {
-        include = true;
-      }
+    if (!lodash.includes(includeEventType, this.meetingType) && !(lodash.includes(includeIconFlags, this.iconFlag))) {
+      return false;
+    }
+    if (moment(this.dateObj).isAfter()) {
+      include = true;
     }
     return include;
   }
