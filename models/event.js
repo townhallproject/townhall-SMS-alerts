@@ -103,7 +103,7 @@ module.exports = class TownHall {
     let message = ''
     let title = this.iconFlag === 'mfol' ? 'Town Hall For Our Lives. ' : '';
     if (this.meetingType === 'Empty Chair Town Hall'){
-      message = `${title} Members of your commuity have organized an ${this.meetingType} and invited ${this.moc} to speak with their constituents at ${this.time}, ${this.date}. Address: ${this.address}.`
+      message = `${title} Members of your community have organized an ${this.meetingType} and invited ${this.moc} to speak with their constituents at ${this.time}, ${this.date}. Address: ${this.address}.`
     } else {
       message = `${title} ${this.moc} is holding a ${this.meetingType} at ${this.time}, ${this.date}. Address: ${this.address}.`
     }
