@@ -1,5 +1,5 @@
 'use strict';
-
+const moment = require('moment');
 const firebasedb = require('../lib/firebaseinit');
 
 module.exports = class User {
@@ -45,6 +45,7 @@ module.exports = class User {
       this.districts = userDistricts.districts;
     } 
     this.hasbeenasked = req.hasbeenasked || false;
+    this.last_updated = moment().format();
     firebasedb.ref(`${userPath}/${this.phoneNumber}`).update(this);
   }
 
