@@ -6,7 +6,7 @@ const firebasedb = require('../lib/firebaseinit');
 firebasedb.ref('sms-users/cached-users').once('value').then((snapshot) => {
   snapshot.forEach((message) => {
     let user = message.val();
-    if (moment().diff(moment(user.last_updated), 'm') > 1){
+    if (moment().diff(moment(user.last_updated), 'm') > 10){
       let ref = firebasedb.ref(`sms-users/cached-users/${message.key}`);
       ref.remove();
     }
