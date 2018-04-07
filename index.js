@@ -9,8 +9,8 @@ const messaging = require('./lib/response');
 const reqTwiml = require('./middleware/session');
 const database = require('./database/firebaseListener');
 
-app.use(reqTwiml, voiceRouter);
-app.use(smsRouter);
+app.use(reqTwiml, smsRouter);
+app.use(voiceRouter);
 
 /* eslint-disable */
 app.use((err, req, res, next) => {

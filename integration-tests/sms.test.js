@@ -12,7 +12,7 @@ let url;
 
 beforeAll(() => {
   jest.dontMock('firebase-admin');
-  let port = 5000;
+  let port = 3000;
   url = `http://localhost:${port}/sms`;
   const server = require('../lib/server.js');
   const express = require('express');
