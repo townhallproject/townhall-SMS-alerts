@@ -3,9 +3,10 @@ const moment = require('moment');
 const lodash = require('lodash');
 const firebasedb = require('../lib/firebaseinit');
 const geometry = require('spherical-geometry-js');
+const User = require('./user');
 
 const maxMeters = 100 * 1609.34;
-const includeEventType = ['Town Hall', 'Campaign Town Hall', 'Empty Chair Town Hall']
+const includeEventType = ['Town Hall', 'Campaign Town Hall', 'Empty Chair Town Hall'];
 const includeIconFlags = ['mfol'];
 
 module.exports = class TownHall {
@@ -49,11 +50,11 @@ module.exports = class TownHall {
           if (location.lat && townhall.lat) {
             const curDistance = geometry.computeDistanceBetween(
               curLocation,
-              new geometry.LatLng(Number(townhall.lat), Number(townhall.lng)),
+              new geometry.LatLng(Number(townhall.lat), Number(townhall.lng))
             );
             include = curDistance < maxMeters? true: false;
           } else {
-            console.log('no location data', townhall.eventId)
+            console.log('no location data', townhall.eventId);
             include = true;
           }
         } else {
@@ -79,14 +80,27 @@ module.exports = class TownHall {
 
   lookupUsers() {
     let townhall = this;
+    let users = [];
     if (townhall.district === 'Senate') {
-      let users = [];
       return new Promise(function(resolve, reject) {
         firebasedb.ref(`sms-users/${townhall.state}`).once('value').then((snapshot) => {
           if (snapshot.exists()) {
             snapshot.forEach((district) => {
               district.forEach((user) => {
-                users.push(user);
+                User.getLatLng(user.val())
+                  .then((updatedUser)=> {
+                    if (updatedUser.location){
+                      const { location } = updatedUser;
+                      let curLocation = new geometry.LatLng(Number(location.lat), Number(location.lng));
+                      const curDistance = geometry.computeDistanceBetween(
+                        curLocation,
+                        new geometry.LatLng(Number(townhall.lat), Number(townhall.lng))
+                      );
+                      if (curDistance < maxMeters) {
+                        users.push(user.val());
+                      }
+                    }
+                  });
               });
             });
             resolve (users);
@@ -96,16 +110,17 @@ module.exports = class TownHall {
         });
       });
     }
-    return firebasedb.ref(`sms-users/${townhall.state}/${townhall.district}`).once('value');
+    return firebasedb.ref(`sms-users/${townhall.state}/${townhall.district}`).once('value')
+      .then((response)=> lodash.values(response.val()));
   }
 
   print () {
-    let message = ''
+    let message = '';
     let title = this.iconFlag === 'mfol' ? 'Town Hall For Our Lives. ' : '';
     if (this.meetingType === 'Empty Chair Town Hall'){
-      message = `${title} Members of your community have organized an ${this.meetingType} and invited ${this.moc} to speak with their constituents at ${this.time}, ${this.date}. Address: ${this.address}.`
+      message = `${title} Members of your community have organized an ${this.meetingType} and invited ${this.moc} to speak with their constituents at ${this.time}, ${this.date}. Address: ${this.address}.`;
     } else {
-      message = `${title} ${this.moc} is holding a ${this.meetingType} at ${this.time}, ${this.date}. Address: ${this.address}.`
+      message = `${title} ${this.moc} is holding a ${this.meetingType} at ${this.time}, ${this.date}. Address: ${this.address}.`;
     }
     return message;
   }
