@@ -8,6 +8,9 @@ let firebasemock = {
   update: jest.fn(() => {
     return true;
   }),
+  child: function() {
+    return this;
+  },
 };
 
 describe('Text class', () => {
@@ -19,7 +22,7 @@ describe('Text class', () => {
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
       expect(newtext).toEqual({
-        'body': ' Marc Veasey is holding a Town Hall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.', 'eventId': 'fb_149229795682973', 'phoneNumber': 'number',    
+        'body': ' Marc Veasey is holding a Town Hall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.', 'dateObj': 1510932600000, 'eventId': 'fb_149229795682973', 'phoneNumber': 'number', 'type': 'TX-33',    
       });
     });
 
