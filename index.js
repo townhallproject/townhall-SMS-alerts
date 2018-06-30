@@ -8,7 +8,7 @@ const app = express();
 const messaging = require('./lib/response');
 const reqTwiml = require('./middleware/session');
 const database = require('./database/firebaseListener');
-
+const checkQueue = require('./database/sendTextsInQueue');
 app.use(reqTwiml, smsRouter);
 app.use(voiceRouter);
 
@@ -22,4 +22,5 @@ app.use((err, req, res, next) => {
 server.start(app, PORT)
   .then(console.log)
   .then(database)
+  .then(() => checkQueue.start())
   .catch(console.log);
