@@ -3,8 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser').urlencoded({
   extended: false,
 });
-const smsRouter = module.exports = express.Router();
 
+const smsRouter = module.exports = express.Router();
 const messaging = require('../lib/response');
 const scripts = require('../lib/scripts');
 
@@ -29,11 +29,11 @@ smsRouter.post('/sms',
       req.townHalls.forEach((townhall) => {
         req.twiml.message(townhall.print());
       });
-      req.twiml.message('That\'s all the events we have for your reps. Do you want to sign up to get a text when your rep is holding a town hall? (Y/N)')
+      req.twiml.message('That\'s all the events we have for your reps. Do you want to sign up to get a text when your rep is holding a town hall? (Y/N)');
     } else {
       req.twiml.message(scripts.noEvents);
     }
     req.hasbeenasked = true;
     new User(req).updateCache(req);
-    messaging.end(res, req.twiml)
+    messaging.end(res, req.twiml);
   });

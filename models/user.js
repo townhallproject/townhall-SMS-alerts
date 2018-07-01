@@ -3,6 +3,19 @@ const moment = require('moment');
 const firebasedb = require('../lib/firebaseinit');
 
 module.exports = class User {
+  static getLatLng(user) {
+    return firebasedb.ref(`zips/${user.zipcode}`)
+      .once('value')
+      .then((latlngObj) => {
+        if (!latlngObj.exists()) {
+          return;
+        }
+        const latlng = latlngObj.val();
+        user.location = { lat: latlng.LAT, lng: latlng.LNG };
+        return user;
+      });
+  }
+  
   constructor (req){
     this.phoneNumber = req.body.From;
     this.zipcode = req.zipcode;

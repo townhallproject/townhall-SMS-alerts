@@ -7,13 +7,14 @@ module.exports = function() {
     let townhall = new TownHall(snapshot.val());
     if (townhall.includeInQueue()) {
       townhall.lookupUsers().then((users) => {
-        if (users.exists()) {
+        if (users.length > 0) {
           users.forEach(user => {
             //make a new text to send, add to queue
-            let newText = new Text(user.val(), townhall);
+            let newText = new Text(user, townhall);
             newText.writeToFirebase();
           });
         }
+   
 
       }).catch(() => {
         // console.log(e);
