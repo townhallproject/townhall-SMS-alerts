@@ -7,7 +7,7 @@ module.exports = class Text {
     this.dateObj = townhall.dateObj;
     this.phoneNumber = user.phoneNumber;
     this.type = `${townhall.state}-${townhall.district}`;
-    this.body = townhall.print();
+    this.body = `Upcoming town hall: ${townhall.print()}`;
   }
   
   writeToFirebase(mockref) {
