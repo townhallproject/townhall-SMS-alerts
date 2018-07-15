@@ -10,7 +10,7 @@ let url;
 
 beforeAll(() => {
   jest.dontMock('firebase-admin');
-  let port = 8080;
+  let port = 8090;
   url = `http://localhost:${port}/voice`;
   const server = require('../lib/server.js');
   const express = require('express');
