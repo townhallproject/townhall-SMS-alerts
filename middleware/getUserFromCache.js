@@ -11,7 +11,10 @@ module.exports = function (req, res, next) {
         let user = snapshot.val();
         req.zipcode = user.zipcode;
         req.hasbeenasked = user.hasbeenasked || false;
-        req.districts = user.districts;
+        req.alertSent = user.alertSent || false;
+        req.districts = user.districts || null;
+        req.eventId = user.eventId || null;
+        req.stateDistrict = user.stateDistrict || null;
       }
       return next();
     }).catch(err=>{
