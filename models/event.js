@@ -93,9 +93,9 @@ module.exports = class TownHall {
               let totalUsers = district.numChildren();
               let checkedUsers = 0;
               district.forEach((user) => {
-                checkedUsers++;
                 return User.getLatLng(user.val())
                   .then((updatedUser) => {
+                    checkedUsers++;
                     if (updatedUser.location) {
                       const { location } = updatedUser;
                       let curLocation = new geometry.LatLng(Number(location.lat), Number(location.lng));
@@ -112,8 +112,9 @@ module.exports = class TownHall {
                     } else {
                       console.log('no location data for user', updatedUser.phoneNumber);
                     }
+                    console.log(checkedDistricts, totalDistricts, checkedUsers, checkedDistricts);
                     if (totalDistricts === checkedDistricts && totalUsers === checkedUsers) {
-                      console.log(checkedDistricts, totalDistricts, checkedUsers, checkedDistricts);
+                      console.log('reached end');
                       resolve (users);
                     }
                   });
