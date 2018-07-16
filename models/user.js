@@ -15,7 +15,7 @@ module.exports = class User {
         return user;
       });
   }
-  
+
   constructor (req){
     this.phoneNumber = req.body.From;
     this.zipcode = req.zipcode;
@@ -47,19 +47,31 @@ module.exports = class User {
     return firebaseref.update(updates);
   }
 
-  updateCache(req){
+  updateAttending(req, firebasemock) {
+    let userPath = `sms-users/all-users/${this.phoneNumber}`;
+    let firebaseref = firebasemock || firebasedb.ref(userPath);
+    if (req.eventId) {
+      return firebaseref.child('attending').push(req.eventId);
+    }
+    return Promise.resolve();
+  }
+
+  updateCache(req, firebasemock){
     let userPath = 'sms-users/cached-users';
     if (req.districts) {
       let userDistricts = req.userDistricts || { districts: [] };
       req.districts.forEach(district => {
         userDistricts.districts.push(district);
-
       });
       this.districts = userDistricts.districts;
     } 
     this.hasbeenasked = req.hasbeenasked || false;
+    this.alertSent = req.alertSent || false;
+    this.eventId = req.eventId || false;
+    this.stateDistrict = req.stateDistrict || false;
     this.last_updated = moment().format();
-    firebasedb.ref(`${userPath}/${this.phoneNumber}`).update(this);
+    let firebaseref = firebasemock || firebasedb.ref(`${userPath}/${this.phoneNumber}`);
+    return firebaseref.update(this);
   }
 
   deleteFromCache() {

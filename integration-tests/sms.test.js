@@ -56,7 +56,6 @@ describe('SMS', () => {
           expect(res.status).toEqual(200);
           expect(Array.isArray(res.body.Response.Message)).toBe(true);
         });
-
     });
 
     test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code.', () => {
@@ -86,7 +85,7 @@ describe('SMS', () => {
           expect(res.body.Response.Message).toEqual([scripts.zipLookupFailed]);
         });
     });
-    test('should return message from an array', ()=>{
+    test('should return message from an array', () => {
       let incoming = { Body: '27278', From: '+1111111111'};
 
       return request
@@ -97,6 +96,31 @@ describe('SMS', () => {
         .then(res => {
           expect(Array.isArray(res.body.Response.Message)).toBe(true);
         });
+    });
+
+    test('it should thank the person for attending ', () => {
+      let req = {
+        body: {
+          From:'+1111111111',
+        },
+        zipcode: '27278',
+      };
+      let incoming = { Body: 'Yeah', From: '+1111111111' };
+      const userToCache = new User(req);
+      return userToCache.updateCache({ alertSent: true, eventId: 'eventId', stateDistrict: 'Senate' })
+        .then(() => {
+          return request
+            .post(url)
+            .type('form')
+            .send(incoming)
+            .parse(xml2jsParser)
+            .then(res => {
+              console.log(res.body.Response.Message);
+              expect(res.body.Response.Message).toEqual([scripts.isAttending]);
+            });
+
+        });
+
     });
   });
 });
