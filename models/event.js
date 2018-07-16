@@ -89,7 +89,7 @@ module.exports = class TownHall {
             snapshot.forEach((district) => {
               district.forEach((user) => {
                 User.getLatLng(user.val())
-                  .then((updatedUser)=> {
+                  .then((updatedUser) => {
                     if (updatedUser.location) {
                       const { location } = updatedUser;
                       let curLocation = new geometry.LatLng(Number(location.lat), Number(location.lng));
@@ -101,7 +101,7 @@ module.exports = class TownHall {
                         console.log('pushing user', user.val());
                         users.push(user.val());
                       } else {
-                        console.log('user too far away', this.eventId, updatedUser.phoneNumber, updatedUser.zipcode);
+                        console.log('user too far away', townhall.eventId, updatedUser.phoneNumber, updatedUser.zipcode);
                       }
                     } else {
                       console.log('no location data for user', updatedUser.phoneNumber);
