@@ -75,6 +75,7 @@ module.exports = class TownHall {
     if (moment(this.dateObj).isAfter()) {
       include = true;
     }
+    console.log(this.eventId, include);
     return include;
   }
 
@@ -89,7 +90,7 @@ module.exports = class TownHall {
               district.forEach((user) => {
                 User.getLatLng(user.val())
                   .then((updatedUser)=> {
-                    if (updatedUser.location){
+                    if (updatedUser.location) {
                       const { location } = updatedUser;
                       let curLocation = new geometry.LatLng(Number(location.lat), Number(location.lng));
                       const curDistance = geometry.computeDistanceBetween(
@@ -98,7 +99,11 @@ module.exports = class TownHall {
                       );
                       if (curDistance < maxMeters) {
                         users.push(user.val());
+                      } else {
+                        console.log('user too far away', updatedUser.phoneNumber, updatedUser.zipcode);
                       }
+                    } else {
+                      console.log('no location data for user', updatedUser.phoneNumber);
                     }
                   });
               });

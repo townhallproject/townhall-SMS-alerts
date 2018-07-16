@@ -14,10 +14,8 @@ module.exports = function() {
             newText.writeToFirebase();
           });
         }
-   
-
-      }).catch(() => {
-        // console.log(e);
+      }).catch((e) => {
+        console.log(e);
       });
     }
   });
