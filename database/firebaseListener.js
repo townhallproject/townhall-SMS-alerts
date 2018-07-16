@@ -10,6 +10,7 @@ module.exports = function() {
         if (users.length > 0) {
           users.forEach(user => {
             //make a new text to send, add to queue
+            console.log(user.phoneNumber, townhall.eventId);
             let newText = new Text(user, townhall);
             newText.writeToFirebase();
           });
