@@ -11,12 +11,10 @@ module.exports = class Text {
   }
   
   writeToFirebase(mockref) {
-    let updates = {};
     let firebaseref = mockref || firebasedb.ref();
     let path = `sms-queue/`;
     let newPostKey = `${this.phoneNumber}${this.eventId}`;
     this.key = newPostKey;
-    updates[path + newPostKey] = this;
     return firebaseref.child(path + newPostKey).update(this);
   }
 };

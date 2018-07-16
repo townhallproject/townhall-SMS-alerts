@@ -98,9 +98,10 @@ module.exports = class TownHall {
                         new geometry.LatLng(Number(townhall.lat), Number(townhall.lng))
                       );
                       if (curDistance < maxMeters) {
+                        console.log('pushing user', user.val());
                         users.push(user.val());
                       } else {
-                        console.log('user too far away', updatedUser.phoneNumber, updatedUser.zipcode);
+                        console.log('user too far away', this.eventId, updatedUser.phoneNumber, updatedUser.zipcode);
                       }
                     } else {
                       console.log('no location data for user', updatedUser.phoneNumber);
@@ -116,7 +117,7 @@ module.exports = class TownHall {
       });
     }
     return firebasedb.ref(`sms-users/${townhall.state}/${townhall.district}`).once('value')
-      .then((response)=> lodash.values(response.val()));
+      .then((response) => lodash.values(response.val()));
   }
 
   print () {
