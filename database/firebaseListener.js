@@ -14,6 +14,8 @@ module.exports = function() {
             let newText = new Text(user, townhall);
             newText.writeToFirebase();
           });
+        } else {
+          console.log(townhall.eventId, 'no users');
         }
       }).catch((e) => {
         console.log(e);
