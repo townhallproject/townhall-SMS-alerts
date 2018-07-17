@@ -93,7 +93,7 @@ module.exports = class TownHall {
               let totalUsers = district.numChildren();
               let checkedUsers = 0;
               district.forEach((user) => {
-                return User.getLatLng(user.val())
+                User.getLatLng(user.val())
                   .then((updatedUser) => {
                     checkedUsers++;
                     if (updatedUser.location) {
