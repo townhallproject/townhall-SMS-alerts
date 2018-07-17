@@ -38,7 +38,7 @@ describe('Text Queue', () => {
       let newtext = new Text(user, newtownhall);
       return newtext.sendAlert()
         .then((sent) => {
-          expect(sent.sendAlert).toEqual(true);
+          expect(sent.alertSent).toEqual(true);
           expect(sent.stateDistrict).toEqual('TX-33');
         });
     });
