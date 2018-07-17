@@ -86,10 +86,7 @@ module.exports = class TownHall {
       return new Promise(function(resolve, reject) {
         firebasedb.ref(`sms-users/${townhall.state}`).once('value').then((snapshot) => {
           if (snapshot.exists()) {
-            let totalDistricts = snapshot.numChildren();
-            let checkedDistricts = 0;
             snapshot.forEach((district) => {
-              checkedDistricts++;
               let totalUsers = district.numChildren();
               let checkedUsers = 0;
               district.forEach((user) => {
@@ -104,17 +101,11 @@ module.exports = class TownHall {
                         new geometry.LatLng(Number(townhall.lat), Number(townhall.lng))
                       );
                       if (curDistance < maxMeters) {
-                        console.log('pushing user', townhall.eventId, user.val());
                         users.push(user.val());
-                      } else {
-                        console.log('user too far away', townhall.eventId, updatedUser.phoneNumber, updatedUser.zipcode);
                       }
-                    } else {
-                      console.log('no location data for user', updatedUser.phoneNumber);
                     }
-                    console.log(checkedDistricts, totalDistricts, checkedUsers, checkedDistricts);
-                    if (totalDistricts === checkedDistricts && totalUsers === checkedUsers) {
-                      console.log('reached end');
+                    if (totalUsers === checkedUsers) {
+                      console.log(district.key, checkedUsers, totalUsers);
                       resolve (users);
                     }
                   });
