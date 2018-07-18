@@ -53,23 +53,32 @@ module.exports = class Text {
       });
   }
   
-  sendAlert(){
-    let toNumber = testing ? process.env.TESTING_NUMBER : this.phoneNumber;
+  sendAlert(testingNumber){
+    let sendingNumber = testing ? process.env.TESTING_NUMBER : this.phoneNumber;
+    let cacheNumber = testingNumber || sendingNumber;
     const thisAlert = this;
-    return messaging.newMessage(this.body, toNumber)
-      .then(() => {
-        thisAlert.markAsSent();
-      })
-      .then(() => {
-        return messaging.newMessage(scripts.afterAlertIsSent, toNumber)
+    return User.getUserFromCache(cacheNumber)
+      .then(cachedUser => {
+        if (cachedUser && cachedUser.alertSent) {
+          return Promise.resolve({
+            alertSent: false,
+          });
+        }
+
+        return messaging.newMessage(this.body, sendingNumber)
           .then(() => {
-            return thisAlert.updateCacheWithAlertData(toNumber);
+            thisAlert.markAsSent();
           })
-          .catch(e => {
-            console.log(e);
+          .then(() => {
+            return messaging.newMessage(scripts.afterAlertIsSent, sendingNumber)
+              .then(() => {
+                return thisAlert.updateCacheWithAlertData(cacheNumber);
+              })
+              .catch(e => {
+                console.log(e);
+              });
           });
       });
-          
   }
   
   writeToFirebase(mockref) {
