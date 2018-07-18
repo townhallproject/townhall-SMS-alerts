@@ -8,12 +8,12 @@ const User = require('../models/user');
 const testing = process.env.NODE_ENV !== 'production';
 
 module.exports = class Text {
-  constructor (user, townhall) {
-    this.eventId = townhall.eventId;
-    this.dateObj = townhall.dateObj;
-    this.phoneNumber = user.phoneNumber;
-    this.type = `${townhall.state}-${townhall.district}`;
-    this.body = `Upcoming town hall: ${townhall.print()}`;
+  constructor (opts, townhall) {
+    this.eventId = opts.eventId || townhall.eventId;
+    this.dateObj = opts.dateObj || townhall.dateObj;
+    this.phoneNumber = opts.phoneNumber;
+    this.type = opts.type || `${townhall.state}-${townhall.district}`;
+    this.body = opts.body || `Upcoming town hall: ${townhall.print()}`;
   }
 
   timeToSend(){
