@@ -16,7 +16,10 @@ const sendFromQueue = () => {
         messageData.sendAlert();
       } 
     });
-  });
+  })
+    .catch(e => {
+      console.log(e);
+    });
 };
 
 const checkQueue = new CronJob({
