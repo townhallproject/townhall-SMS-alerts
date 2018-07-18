@@ -16,6 +16,16 @@ module.exports = class User {
       });
   }
 
+  static getUserFromCache(phoneNumber) {
+    return firebasedb.ref(`sms-users/cached-users/`).child(phoneNumber).once('value')
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          return snapshot.val();
+        }
+        return {};
+      });
+  }
+
   constructor (req){
     this.phoneNumber = req.body.From;
     this.zipcode = req.zipcode;
