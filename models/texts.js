@@ -14,6 +14,7 @@ module.exports = class Text {
     this.phoneNumber = opts.phoneNumber;
     this.type = opts.type || `${townhall.state}-${townhall.district}`;
     this.body = opts.body || `Upcoming town hall: ${townhall.print()}`;
+    this.key = opts.key || null;
   }
 
   timeToSend(){
@@ -24,12 +25,17 @@ module.exports = class Text {
     return false;
   }
 
-  remove(){
+  remove() {
+    if (!this.key){
+      return Promise.reject('no key');
+    }
     return firebasedb.ref(`sms-queue/${this.key}`).remove();
   }
 
-  markAsSent(){
-    console.log('sent alert', moment(this.dateObj).format('MM/DD/YY, hh:mm A'));
+  markAsSent() {
+    if (!this.key) {
+      return Promise.reject('no key');
+    }
     return firebasedb.ref(`sms-queue/${this.key}`).update({
       sent: true,
     });
@@ -78,7 +84,13 @@ module.exports = class Text {
               .catch(e => {
                 console.log(e);
               });
+          })
+          .catch(e => {
+            console.log(e);
           });
+      })
+      .catch(e =>{
+        console.log(e);
       });
   }
   

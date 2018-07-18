@@ -27,7 +27,7 @@ module.exports = class User {
   }
 
   constructor (req){
-    this.phoneNumber = req.body.From;
+    this.phoneNumber = req.phoneNumber || req.body.From;
     this.zipcode = req.zipcode;
   }
 
