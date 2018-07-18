@@ -1,5 +1,5 @@
 const clearCache = require('./clear-testing-cache');
-const User = require('../models/User');
+const User = require('../models/user');
 const testingTextQueueNumber = '+11234567890';
 
 describe('user cache', () => {
