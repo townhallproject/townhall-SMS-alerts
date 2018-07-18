@@ -44,6 +44,7 @@ describe('Text Queue', () => {
       };
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
+      newtext.key = 'key';
       return newtext.sendAlert(testingTextQueueNumber)
         .then((sent) => {
           console.log(sent);
