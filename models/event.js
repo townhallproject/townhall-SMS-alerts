@@ -4,6 +4,7 @@ const lodash = require('lodash');
 const firebasedb = require('../lib/firebaseinit');
 const geometry = require('spherical-geometry-js');
 const User = require('./user');
+const Text = require('./texts');
 
 const maxMeters = 100 * 1609.34;
 const includeEventType = ['Town Hall', 'Campaign Town Hall', 'Empty Chair Town Hall'];
@@ -67,6 +68,15 @@ module.exports = class TownHall {
     return include;
   }
 
+  checkSenateDistance(location){
+    let curLocation = new geometry.LatLng(Number(location.lat), Number(location.lng));
+    const curDistance = geometry.computeDistanceBetween(
+      curLocation,
+      new geometry.LatLng(Number(this.lat), Number(this.lng))
+    );
+    return curDistance < maxMeters;
+  }
+
   includeInQueue() {
     let include = false;
     if (!lodash.includes(includeEventType, this.meetingType) && !(lodash.includes(includeIconFlags, this.iconFlag))) {
@@ -79,48 +89,47 @@ module.exports = class TownHall {
     return include;
   }
 
-  lookupUsers() {
+  addToQueue(user){
+    console.log(user.phoneNumber, this.eventId);
+    let newText = new Text(user, this);
+    newText.writeToFirebase();
+  }
+
+  lookupUsersAndAddToQueue() {
     let townhall = this;
-    let users = [];
     if (townhall.district === 'Senate') {
-      return new Promise(function(resolve, reject) {
-        firebasedb.ref(`sms-users/${townhall.state}`).once('value').then((snapshot) => {
-          if (snapshot.exists()) {
-            snapshot.forEach((district) => {
-              let totalUsers = district.numChildren();
-              let checkedUsers = 0;
-              district.forEach((user) => {
-                User.getLatLng(user.val())
-                  .then((updatedUser) => {
-                    checkedUsers++;
-                    if (updatedUser.location) {
-                      const { location } = updatedUser;
-                      let curLocation = new geometry.LatLng(Number(location.lat), Number(location.lng));
-                      const curDistance = geometry.computeDistanceBetween(
-                        curLocation,
-                        new geometry.LatLng(Number(townhall.lat), Number(townhall.lng))
-                      );
-                      if (curDistance < maxMeters) {
-                        users.push(user.val());
-                      }
+      return firebasedb.ref(`sms-users/${townhall.state}`).once('value').then((snapshot) => {
+        if (snapshot.exists()) {
+          snapshot.forEach((district) => {
+            district.forEach((user) => {
+              User.getLatLng(user.val())
+                .then((updatedUser) => {
+                  if (updatedUser.location) {
+                    const { location } = updatedUser;
+                    if (townhall.checkSenateDistance(location)) {
+                      //make a new text to send, add to queue
+                      townhall.addToQueue(updatedUser);
                     }
-                    if (totalUsers === checkedUsers) {
-                      console.log(district.key, checkedUsers, totalUsers);
-                      resolve (users);
-                    }
-                  });
-              });
+                  }
+                });
             });
-          } else {
-            reject('no users for this townhall');
-          }
-        }).catch(() => {
-          reject('no users for this townhall');
-        });
+          });
+        }
       });
+    } else {
+      return firebasedb.ref(`sms-users/${townhall.state}/${townhall.district}`).once('value')
+        .then((response) => lodash.values(response.val()))
+        .then((users) => {
+          if (users.length > 0) {
+            users.forEach(user => {
+              //make a new text to send, add to queue
+              townhall.addToQueue(user);
+            });
+          }
+        }).catch((e) => {
+          console.log(e);
+        });
     }
-    return firebasedb.ref(`sms-users/${townhall.state}/${townhall.district}`).once('value')
-      .then((response) => lodash.values(response.val()));
   }
 
   print () {
