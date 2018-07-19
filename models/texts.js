@@ -73,6 +73,7 @@ module.exports = class Text {
 
         return messaging.newMessage(this.body, sendingNumber)
           .then(() => {
+            console.log('sent', sendingNumber);
             thisAlert.markAsSent();
           })
           .then(() => {
