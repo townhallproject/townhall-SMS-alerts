@@ -23,7 +23,7 @@ const sendFromQueue = () => {
 };
 
 const checkQueue = new CronJob({
-  cronTime: '00 * 9-16 * * *',
+  cronTime: '00 * 9-17 * * *',
   onTick: function () {
     sendFromQueue();
     console.log('checked');
