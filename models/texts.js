@@ -15,6 +15,7 @@ module.exports = class Text {
     this.type = opts.type || `${townhall.state}-${townhall.district}`;
     this.body = opts.body || `Upcoming town hall: ${townhall.print()}`;
     this.key = opts.key || null;
+    this.sent = opts.sent || false;
   }
 
   timeToSend(){
