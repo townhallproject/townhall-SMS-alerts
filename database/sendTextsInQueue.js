@@ -11,7 +11,7 @@ const sendFromQueue = () => {
       if (moment(messageData.dateObj).isBefore()) {
         console.log('in the past', moment(messageData.dateObj).format('MM/DD/YY, hh:mm A'));
         messageData.remove();
-      } else if (messageData.timeToSend() && !messageData.sent) {
+      } else if (messageData.timeToSend() && !message.val().sent) {
         console.log('sending:', messageData.key, moment(messageData.dateObj).format('MM/DD/YY, hh:mm A'));
         messageData.sendAlert();
       } 
