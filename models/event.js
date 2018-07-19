@@ -29,6 +29,7 @@ module.exports = class TownHall {
     this.time = fbtownhall.Time;
     this.lat = fbtownhall.lat;
     this.lng = fbtownhall.lng;
+    this.zoneId = fbtownhall.zoneString;
   }
 
   includeTownHall (districts, location) {
