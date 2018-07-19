@@ -91,7 +91,6 @@ module.exports = class TownHall {
   }
 
   addToQueue(user){
-    console.log(user.phoneNumber, this.eventId);
     let newText = new Text(user, this);
     newText.writeToFirebase();
   }

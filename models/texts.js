@@ -60,8 +60,7 @@ module.exports = class Text {
   }
   
   sendAlert(testingNumber){
-    // let sendingNumber = testing ? process.env.TESTING_NUMBER : this.phoneNumber;
-    let sendingNumber = process.env.TESTING_NUMBER;
+    let sendingNumber = testing ? process.env.TESTING_NUMBER : this.phoneNumber;
     let cacheNumber = testingNumber || sendingNumber;
     const thisAlert = this;
     return User.getUserFromCache(cacheNumber)
@@ -74,6 +73,7 @@ module.exports = class Text {
 
         return messaging.newMessage(this.body, sendingNumber)
           .then(() => {
+            console.log('sent', sendingNumber);
             thisAlert.markAsSent();
           })
           .then(() => {
