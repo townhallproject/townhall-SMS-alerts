@@ -12,7 +12,7 @@ const sendFromQueue = () => {
         console.log('in the past', moment(messageData.dateObj).format('MM/DD/YY, hh:mm A'));
         messageData.remove();
       } else if (messageData.timeToSend() && !messageData.sent) {
-        console.log(messageData.key, moment(messageData.dateObj).format('MM/DD/YY, hh:mm A'));
+        console.log('sending:', messageData.key, moment(messageData.dateObj).format('MM/DD/YY, hh:mm A'));
         messageData.sendAlert();
       } 
     });
