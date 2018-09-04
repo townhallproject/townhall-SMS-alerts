@@ -132,6 +132,19 @@ module.exports = class TownHall {
     }
   }
 
+  removeFromQueue() {
+    let townhall = this;
+    return firebasedb.ref('sms-queue/')
+      .once('value').then((snapshot) => {
+        snapshot.forEach((ele) => {
+          let text = new Text(ele.val());
+          if (text.eventId === townhall.eventId) {
+            text.remove();
+          }
+        });
+      });
+  }
+
   print () {
     let message = '';
     let title = this.iconFlag === 'mfol' ? 'Town Hall For Our Lives. ' : '';
