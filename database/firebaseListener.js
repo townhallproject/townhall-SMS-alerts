@@ -22,7 +22,7 @@ module.exports = function() {
     snapshot.forEach(ele => {
       let text = ele.val();
       firebasedb.ref('townHalls/' + text.eventId).once('value').then(snapshot => {
-        if (!snapshot.exist()) {
+        if (!snapshot.exists()) {
           console.log(ele.key);
         }
 
