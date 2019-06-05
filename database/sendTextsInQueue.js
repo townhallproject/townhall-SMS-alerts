@@ -13,8 +13,8 @@ const sendFromQueue = () => {
         console.log('in the past', moment(messageData.dateObj).format('MM/DD/YY, hh:mm A'));
         messageData.remove();
       } else if (messageData.timeToSend() && !message.val().sent) {
-          messageData.sendAlert();
-          increment.calculateAndSaveAlertCount(messageData.eventId);
+        messageData.sendAlert();
+        increment.calculateAndSaveAlertCount(messageData.eventId);
       } 
     });
   })
