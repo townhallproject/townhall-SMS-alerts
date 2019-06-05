@@ -71,6 +71,12 @@ module.exports = class Text {
           });
         }
 
+        if (!this.body) {
+          return Promise.resolve({
+            alertSent: false,
+          });
+        }
+
         return messaging.newMessage(this.body, sendingNumber)
           .then(() => {
             console.log('sent', sendingNumber);

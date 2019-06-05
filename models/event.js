@@ -13,7 +13,7 @@ const includeIconFlags = ['mfol'];
 module.exports = class TownHall {
   
   constructor (fbtownhall) {
-    this.moc = fbtownhall.Member;
+    this.moc = fbtownhall.Member || fbtownhall.displayName;
     this.district = fbtownhall.district || 'Senate';
     this.state = fbtownhall.state;
     this.link= fbtownhall.link || `https://townhallproject.com?eventId=${fbtownhall.eventId}`;
@@ -148,7 +148,10 @@ module.exports = class TownHall {
   print () {
     let message = '';
     let title = this.iconFlag === 'mfol' ? 'Town Hall For Our Lives. ' : '';
-    if (this.meetingType === 'Empty Chair Town Hall'){
+    if (!this.moc) {
+      return;
+    }
+    if (this.meetingType === 'Empty Chair Town Hall') {
       message = `${title} Members of your community have organized an ${this.meetingType} and invited ${this.moc} to speak with their constituents at ${this.time}, ${this.date}. Address: ${this.address}.`;
     } else {
       message = `${title} ${this.moc} is holding a ${this.meetingType} at ${this.time}, ${this.date}. Address: ${this.address}.`;

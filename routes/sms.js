@@ -27,7 +27,10 @@ smsRouter.post('/sms',
   (req, res) => {
     if (req.townHalls.length > 0) {
       req.townHalls.forEach((townhall) => {
-        req.twiml.message(townhall.print());
+        const message = townhall.print();
+        if (message) {
+          req.twiml.message(message);
+        }
       });
       req.twiml.message('That\'s all the events we have for your reps. Do you want to sign up to get a text when your rep is holding a town hall? (Y/N)');
     } else {
