@@ -31,6 +31,28 @@ module.exports = class User {
     this.zipcode = req.zipcode;
   }
 
+  getDistricts(){
+    //return state and a district as arrays;
+    let districts = [];
+    let user = this;
+    return firebasedb.ref(`zipToDistrict/${user.zipcode}`)
+      .once('value')
+      .then((districtsData) => {
+        if (!districtsData.exists()) {
+          return;
+        }
+        districtsData.forEach((district) => {
+          let districtObj = {
+            state: district.val().abr,
+            district: district.val().dis,
+          };
+          districts.push(districtObj);
+        });
+        user.districts = districts;
+        return user;
+      }).catch(console.log);
+  }
+
   writeToFirebase(req, firebasemock) {
     let updates = {};
     let user = {};
@@ -38,12 +60,12 @@ module.exports = class User {
 
     let userPath = 'sms-users/all-users/';
     let userPostKey = `${this.phoneNumber}`;
-
+    let districts = this.districts || req.districts;
     let firebaseref = firebasemock || firebasedb.ref();
-    if (!req.districts){
+    if (!districts){
       return Promise.reject('no districts');
     }
-    req.districts.forEach(district => {
+    districts.forEach(district => {
       let path = `sms-users/${district.state}/${district.district}/`;
       let newPostKey = `${this.phoneNumber}`;
       updates[path + newPostKey] = this;
