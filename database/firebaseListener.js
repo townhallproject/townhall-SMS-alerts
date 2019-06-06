@@ -1,23 +1,32 @@
 const firebasedb = require('../lib/firebaseinit');
 const TownHall = require('../models/event');
-const Text = require('../models/texts');
 
 module.exports = function() {
   firebasedb.ref('townHalls').on('child_added', (snapshot) => {
     let townhall = new TownHall(snapshot.val());
     if (townhall.includeInQueue()) {
-      townhall.lookupUsers().then((users) => {
-        if (users.exists()) {
-          users.forEach(user => {
-            //make a new text to send, add to queue
-            let newText = new Text(user.val(), townhall);
-            newText.writeToFirebase();
-          });
+      townhall.lookupUsersAndAddToQueue()
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  });
+  firebasedb.ref('townHalls').on('child_removed', (snapshot) => {
+    let townhall = new TownHall(snapshot.val());
+    townhall.removeFromQueue()
+      .catch((e) => {
+        console.log(e);
+      });
+  });
+  firebasedb.ref('sms-queue/').once('value').then(snapshot => {
+    snapshot.forEach(ele => {
+      let text = ele.val();
+      firebasedb.ref('townHalls/' + text.eventId).once('value').then(snapshot => {
+        if (!snapshot.exists()) {
+          console.log(ele.key);
         }
 
-      }).catch(() => {
-        // console.log(e);
       });
-    }
+    });
   });
 };

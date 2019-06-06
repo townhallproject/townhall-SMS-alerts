@@ -27,6 +27,7 @@ describe('class TownHall', () => {
         lng: -97,
       };
       let newTownHall = new TownHall(testTownHallData);
+      newTownHall.dateObj = moment().add(7, 'days');
       let include = newTownHall.includeTownHall(districts, location);
       expect(include).toBe(true);
     });
@@ -70,10 +71,24 @@ describe('class TownHall', () => {
     });
   });
 
+  test('it should return false if the event doesnt have all the info', () => {
+    let newTownHall = new TownHall(testTownHallData);
+    newTownHall.date = null;
+    let include = newTownHall.includeTownHall();
+    expect(include).toBe(false);
+  });
+
   describe('includeInQueue method', () => {
 
     test('it should return false if the town hall is not in person and in the past', () => {
       let newTownHall = new TownHall(testTownHallData);
+      let include = newTownHall.includeInQueue();
+      expect(include).toBe(false);
+    });
+
+    test('it should return false if the event doesnt have all the info', () => {
+      let newTownHall = new TownHall(testTownHallData);
+      newTownHall.meetingType = null;
       let include = newTownHall.includeInQueue();
       expect(include).toBe(false);
     });
