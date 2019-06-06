@@ -8,8 +8,8 @@ const townhalldata = require('../models/tests/mockTownHall');
 const testingTextQueueNumber = '+12222222222';
 
 describe('Text Queue', () => {
-  beforeEach(() => {
-    clearCache(testingTextQueueNumber);
+  afterEach((done) => {
+    clearCache(testingTextQueueNumber).then(done);
   });
 
   describe('write and remove', () => {
@@ -62,6 +62,7 @@ describe('Text Queue', () => {
       };
       let user = new User(userReq);
       user.updateCache({alertSent: true});
+
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
       return newtext.sendAlert(testingTextQueueNumber)
