@@ -93,6 +93,10 @@ module.exports = class Text {
           })
           .catch(e => {
             console.log(e);
+            if (e.message === 'The message From/To pair violates a blacklist rule.') {
+              console.log('TODO: remove this user from our database');
+              thisAlert.markAsSent();
+            }
           });
       })
       .catch(e =>{
