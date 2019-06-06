@@ -87,6 +87,6 @@ module.exports = class User {
   deleteFromCache() {
     let userPath = 'sms-users/cached-users';
     const ref = firebasedb.ref(`${userPath}/${this.phoneNumber}`);
-    ref.remove();
+    return ref.remove();
   }
 };
