@@ -35,6 +35,10 @@ module.exports = class TownHall {
   includeTownHall (districts, location) {
     let townhall = this;
     let include = false;
+    
+    if(!this.moc || !this.meetingType || !this.time || !this.date || !this.address) {
+      return false;
+    }
     if (districts.length === 0) {
       throw new Error('The requested state not found');
     }
@@ -81,6 +85,9 @@ module.exports = class TownHall {
   includeInQueue() {
     let include = false;
     if (!lodash.includes(includeEventType, this.meetingType) && !(lodash.includes(includeIconFlags, this.iconFlag))) {
+      return false;
+    }
+    if (!this.moc || !this.meetingType || !this.time || !this.date || !this.address) {
       return false;
     }
     if (moment(this.dateObj).isAfter()) {
