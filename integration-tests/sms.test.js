@@ -45,17 +45,16 @@ afterAll(server.stop);
 
 describe('SMS', () => {
   describe('POST /sms', () => {
-    test('should respond with a 200 when there is an incoming zipcode', () => {
+    test('should respond with a 200 when there is an incoming zipcode', async () => {
       let incoming = {Body: '98122', From: '+1111111111'};
-      return request
+      const res_1 = await request
         .post(url)
         .type('form')
         .send(incoming)
-        .parse(xml2jsParser)
-        .then(res => {
-          expect(res.status).toEqual(200);
-          expect(Array.isArray(res.body.Response.Message)).toBe(true);
-        });
+        .parse(xml2jsParser);
+      
+      expect(res_1.status).toEqual(200);
+      expect(Array.isArray(res_1.body.Response.Message)).toBe(true);
     });
 
     test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code.', () => {

@@ -26,12 +26,13 @@
     "firebase-admin": "^5.5.0",
     "geo-distance": "^0.1.2",
     "moment": "^2.22.0",
-    "request": "^2.83.0",
+    "request": "^2.88.0",
     "spherical-geometry-js": "^1.0.1",
-    "twilio": "^3.9.3"
+    "twilio": "^3.31.1"
   },
   "devDependencies": {
-    "eslint": "^4.11.0",
+    "eslint": "^4.19.1",
+    "eslint-plugin-prefer-object-spread": "^1.2.1",
     "jest": "^21.2.1",
     "mocha": "^4.0.1",
     "superagent": "^3.8.1",

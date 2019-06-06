@@ -3,7 +3,6 @@ const moment = require('moment');
 const CronJob = require('cron').CronJob;
 const firebasedb = require('../lib/firebaseinit');
 const Text = require('../models/texts');
-const increment = require('./smsIncrementCounter');
 
 const sendFromQueue = () => {
   firebasedb.ref('sms-queue').once('value').then((snapshot) => {
@@ -13,8 +12,7 @@ const sendFromQueue = () => {
         console.log('in the past', moment(messageData.dateObj).format('MM/DD/YY, hh:mm A'));
         messageData.remove();
       } else if (messageData.timeToSend() && !message.val().sent) {
-          messageData.sendAlert();
-          increment.calculateAndSaveAlertCount(messageData.eventId);
+        messageData.sendAlert();
       } 
     });
   })

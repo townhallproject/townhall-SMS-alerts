@@ -8,8 +8,8 @@ const townhalldata = require('../models/tests/mockTownHall');
 const testingTextQueueNumber = '+12222222222';
 
 describe('Text Queue', () => {
-  beforeEach(() => {
-    clearCache(testingTextQueueNumber);
+  afterEach((done) => {
+    clearCache(testingTextQueueNumber).then(done);
   });
 
   describe('write and remove', () => {
@@ -62,29 +62,9 @@ describe('Text Queue', () => {
       };
       let user = new User(userReq);
       user.updateCache({alertSent: true});
+
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
-      return newtext.sendAlert(testingTextQueueNumber)
-        .then((sent) => {
-          console.log(sent);
-          expect(sent.alertSent).toEqual(false);
-        });
-    });
-
-    test('wont send if there is no body', () => {
-      let userReq = {
-        body: {
-          From: testingTextQueueNumber,
-        },
-        zipcode: 99999,
-      };
-      let user = new User(userReq);
-
-      const townHall = { ...townhalldata, moc: null }
-
-      let newtownhall = new TownHall(townHall);
-      let newtext = new Text(user, newtownhall);
-      console.log(newtext)
       return newtext.sendAlert(testingTextQueueNumber)
         .then((sent) => {
           console.log(sent);

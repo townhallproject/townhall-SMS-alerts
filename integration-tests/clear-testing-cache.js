@@ -9,5 +9,5 @@ module.exports = (testingTextQueueNumber) => {
   };
     
   let newUser = new User(testingUser);
-  newUser.deleteFromCache();
+  return newUser.deleteFromCache();
 };
