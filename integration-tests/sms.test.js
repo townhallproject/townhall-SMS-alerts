@@ -4,10 +4,14 @@ const request = require('superagent');
 const expect = require('expect');
 const server = require('../lib/server');
 const scripts = require('../lib/scripts');
-
+const constants = require('../constants');
 const User = require('../models/user');
 
 const xml2jsParser = require('superagent-xml2jsparser');
+const {
+  ALERT_SENT,
+} = constants;
+
 let url;
 
 beforeAll(() => {
@@ -106,7 +110,11 @@ describe('SMS', () => {
       };
       let incoming = { Body: 'Yeah', From: '+1111111111' };
       const userToCache = new User(req);
-      return userToCache.updateCache({ alertSent: true, eventId: 'eventId', stateDistrict: 'Senate' })
+      return userToCache.updateCache({
+        sessionType: ALERT_SENT,
+        eventId: 'eventId',
+        stateDistrict: 'Senate'
+      })
         .then(() => {
           return request
             .post(url)

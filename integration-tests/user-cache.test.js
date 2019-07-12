@@ -1,5 +1,8 @@
 const clearCache = require('./clear-testing-cache');
 const User = require('../models/user');
+const constants = require('../constants');
+
+const { ALERT_SENT } = constants;
 const testingTextQueueNumber = '+11234567890';
 
 describe('user cache', () => {
@@ -17,13 +20,13 @@ describe('user cache', () => {
       };
       let newUser = new User(user);
       let settings = {
-        alertSent: true,
+        sessionType: ALERT_SENT,
       };
       return newUser.updateCache(settings)
         .then(() => {
           return User.getUserFromCache(user.body.From)
             .then((userCache) => {
-              expect(userCache.alertSent).toEqual(true);
+              expect(userCache.sessionType).toEqual(ALERT_SENT);
               expect(userCache.hasbeenasked).toEqual(false);
             });
         });

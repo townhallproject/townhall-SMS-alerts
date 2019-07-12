@@ -8,15 +8,22 @@ const subscribeActions = require('../middleware/subscribeActions');
 const deleteUser = require('../middleware/deleteUser');
 const userIsAttending = require('../middleware/userIsAttending');
 const unSubscribeFromRep = require('../middleware/unSubscribeFromRep');
+const constants = require('../constants');
+
+const {
+  ALERT_SENT,
+} = constants;
 
 module.exports = function(req, res, next){
   let response = req.body.Body;
 
-  if ((response.toLowerCase().substring(0, 2) === 'pa')) {
+  // replying with pause
+  if ((response.toLowerCase().substring(0, 4) === 'paus')) {
     deleteUser(req, res);
     return;
   }
-  if (req.alertSent) {
+  // sent a town hall alert, asked if they were attending. 
+  if (req.sessionType === ALERT_SENT) {
     if (response[0].toLowerCase() === 'y') {
       userIsAttending(req, res);
     }
@@ -29,6 +36,8 @@ module.exports = function(req, res, next){
     }
     return new User(req).deleteFromCache();
   }
+
+  // asked if they want to subscribe 
   if (req.hasbeenasked) {
     if (response[0].toLowerCase() === 'y') {
       subscribeActions(req, res);
@@ -37,6 +46,19 @@ module.exports = function(req, res, next){
       messaging.end(res, req.twiml);
     }
     new User(req).deleteFromCache();
+    return;
+  }
+
+  // start of vol recruit conversation 
+  if (req.sessionType === 'volRecruit') {
+    let user = new User(req);
+    let message = {
+      body: response,
+      from_user: true,
+    };
+    user.updateCache({
+      messages: [...req.messages, message],
+    });
     return;
   }
   return next();

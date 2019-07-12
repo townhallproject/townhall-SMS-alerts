@@ -3,7 +3,11 @@ const firebasedb = require('../lib/firebaseinit');
 const Text = require('../models/texts');
 const TownHall = require('../models/event');
 const User = require('../models/user');
+const constants = require('../constants');
 
+const {
+  ALERT_SENT,
+} = constants;
 const townhalldata = require('../models/tests/mockTownHall');
 const testingTextQueueNumber = '+12222222222';
 
@@ -48,7 +52,7 @@ describe('Text Queue', () => {
       return newtext.sendAlert(testingTextQueueNumber)
         .then((sent) => {
           console.log(sent);
-          expect(sent.alertSent).toEqual(true);
+          expect(sent.sessionType).toEqual(ALERT_SENT);
           expect(sent.stateDistrict).toEqual('TX-33');
         });
     });
@@ -61,14 +65,16 @@ describe('Text Queue', () => {
         zipcode: 99999,
       };
       let user = new User(userReq);
-      user.updateCache({alertSent: true});
+      user.updateCache({
+        sessionType: ALERT_SENT,
+      });
 
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
       return newtext.sendAlert(testingTextQueueNumber)
         .then((sent) => {
           console.log(sent);
-          expect(sent.alertSent).toEqual(false);
+          expect(sent.sessionType).toEqual(null);
         });
     });
   });

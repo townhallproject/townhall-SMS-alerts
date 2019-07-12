@@ -10,11 +10,13 @@ module.exports = function (req, res, next) {
       if (snapshot.exists()) {
         let user = snapshot.val();
         req.zipcode = user.zipcode;
+        req.sessionType = user.sessionType || null;
         req.hasbeenasked = user.hasbeenasked || false;
-        req.alertSent = user.alertSent || false;
         req.districts = user.districts || null;
         req.eventId = user.eventId || null;
         req.stateDistrict = user.stateDistrict || null;
+        req.messages = user.messages || [];
+        req.sessionType = user.sessionType || null;
       }
       return next();
     }).catch(err=>{
