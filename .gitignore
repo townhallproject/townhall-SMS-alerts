@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+users-attending.txt
+bin/send-sorry.js
