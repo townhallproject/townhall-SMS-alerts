@@ -60,7 +60,6 @@ smsRouter.post('/send-message',
       .then(userData => {
         const user = new User(userData);
         const sendTo = production ? body.to : process.env.TESTING_NUMBER;
-        console.log('sending to ', sendTo);
         messaging.newMessage(body.body, sendTo)
           .then(() => {
             return user.updateCacheWithMessageInConvo(req.body.body, false, user.sessionType)
