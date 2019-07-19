@@ -3,7 +3,11 @@ const firebasedb = require('../lib/firebaseinit');
 const Text = require('../models/texts');
 const TownHall = require('../models/event');
 const User = require('../models/user');
+const constants = require('../constants');
 
+const {
+  ALERT_SENT,
+} = constants;
 const townhalldata = require('../models/tests/mockTownHall');
 const testingTextQueueNumber = '+12222222222';
 
@@ -38,22 +42,19 @@ describe('Text Queue', () => {
     });
   });
   describe('send alert', () => {
-    test('it sends alert and then updates cache', () => {
+    test('it sends alert and then updates cache', async () => {
       let user = {
         phoneNumber: testingTextQueueNumber,
       };
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
       newtext.key = 'key';
-      return newtext.sendAlert(testingTextQueueNumber)
-        .then((sent) => {
-          console.log(sent);
-          expect(sent.alertSent).toEqual(true);
-          expect(sent.stateDistrict).toEqual('TX-33');
-        });
+      const sent = await newtext.sendAlert(testingTextQueueNumber);
+      expect(sent.sessionType).toEqual(ALERT_SENT);
+      expect(sent.stateDistrict).toEqual('TX-33');
     });
 
-    test('wont send if the user has already recieved alert', () => {
+    test('wont send if the user has already received alert', () => {
       let userReq = {
         body: {
           From: testingTextQueueNumber,
@@ -61,14 +62,15 @@ describe('Text Queue', () => {
         zipcode: 99999,
       };
       let user = new User(userReq);
-      user.updateCache({alertSent: true});
+      user.updateCache({
+        sessionType: ALERT_SENT,
+      });
 
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
       return newtext.sendAlert(testingTextQueueNumber)
         .then((sent) => {
-          console.log(sent);
-          expect(sent.alertSent).toEqual(false);
+          expect(sent.sessionType).toEqual(null);
         });
     });
   });

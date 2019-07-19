@@ -93,7 +93,6 @@ module.exports = class TownHall {
     if (moment(this.dateObj).isAfter()) {
       include = true;
     }
-    console.log(this.eventId, include);
     return include;
   }
 

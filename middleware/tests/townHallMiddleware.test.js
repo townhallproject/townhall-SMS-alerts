@@ -54,7 +54,7 @@ describe('Town hall middleware', () => {
       req.zipcode = '11111';
       req.body.From = '+1111111111';
       return townHallHandler.getDistricts(req, res, () => {
-        expect(req.districts).toEqual();
+        expect(req.districts).toBeUndefined();
       });
     });
   });

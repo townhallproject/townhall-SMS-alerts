@@ -4,6 +4,11 @@ const firebasedb = require('../lib/firebaseinit');
 const messaging = require('../lib/response');
 const scripts = require('../lib/scripts');
 const User = require('../models/user');
+const constants = require('../constants');
+
+const {
+  ALERT_SENT,
+} = constants;
 
 const testing = process.env.NODE_ENV !== 'production';
 
@@ -49,7 +54,7 @@ module.exports = class Text {
       zipcode: '',
     });
     const update = {
-      alertSent: true,
+      sessionType: ALERT_SENT,
       eventId: this.eventId,
       stateDistrict: this.type,
     };
@@ -65,15 +70,15 @@ module.exports = class Text {
     const thisAlert = this;
     return User.getUserFromCache(cacheNumber)
       .then(cachedUser => {
-        if (cachedUser && cachedUser.alertSent) {
+        if (cachedUser && cachedUser.sessionType === ALERT_SENT) {
           return Promise.resolve({
-            alertSent: false,
+            sessionType: null,
           });
         }
 
         if (!this.body) {
           return Promise.resolve({
-            alertSent: false,
+            sessionType: null,
           });
         }
 

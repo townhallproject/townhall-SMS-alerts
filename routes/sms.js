@@ -1,6 +1,7 @@
 'use strict';
 const express = require('express');
-const bodyParser = require('body-parser').urlencoded({
+const bodyParser = require('body-parser');
+const textBodyParser = bodyParser.urlencoded({
   extended: false,
 });
 
@@ -16,8 +17,10 @@ const getEvents = require('../middleware/getEvents');
 const checkSubscribe = require('../middleware/checkSubscribe');
 const getUserFromCache = require('../middleware/getUserFromCache');
 
+const production = process.env.NODE_ENV === 'production';
+
 smsRouter.post('/sms',
-  bodyParser,
+  textBodyParser,
   getUserFromCache,
   checkSubscribe,
   townHallHandler.checkZip,
@@ -39,4 +42,31 @@ smsRouter.post('/sms',
     req.hasbeenasked = true;
     new User(req).updateCache(req);
     messaging.end(res, req.twiml);
+  });
+
+smsRouter.post('/send-message', 
+  textBodyParser,
+  bodyParser.json(),
+  (req, res) => {
+    console.log('got message', req.body.to, req.body.body);
+    const { body } = req;
+    if (!body.to) {
+      return res.status(406).send('need to send an phone number');
+    }
+    if (!body.body) {
+      return res.status(406).send('need to send an message');
+    }
+    User.getUserFromCache(body.to)
+      .then(userData => {
+        const user = new User(userData);
+        const sendTo = production ? body.to : process.env.TESTING_NUMBER;
+        messaging.newMessage(body.body, sendTo)
+          .then(() => {
+            return user.updateCacheWithMessageInConvo(req.body.body, false, user.sessionType)
+              .then((sentMessage) => {
+                res.status(200).send(sentMessage);
+              });
+          });
+      });
+
   });
