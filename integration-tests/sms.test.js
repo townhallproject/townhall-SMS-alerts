@@ -28,7 +28,6 @@ beforeAll(() => {
   app.use(reqTwiml, smsRouter);
 
   app.use((err, req, res, next) => {
-    console.log('err', err.message);
     messaging.sendAndWrite(req, res, err.message);
     next();
   });
@@ -49,7 +48,7 @@ afterAll(server.stop);
 
 describe('SMS', () => {
   describe('POST /sms', () => {
-    test('should respond with a 200 when there is an incoming zipcode', async () => {
+    test('should respond with a 200 when there is an incoming zipcode', async (done) => {
       let incoming = {Body: '98122', From: '+1111111111'};
       const res_1 = await request
         .post(url)
@@ -59,6 +58,7 @@ describe('SMS', () => {
       
       expect(res_1.status).toEqual(200);
       expect(Array.isArray(res_1.body.Response.Message)).toBe(true);
+      done()
     });
 
     test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code.', () => {
@@ -122,7 +122,6 @@ describe('SMS', () => {
             .send(incoming)
             .parse(xml2jsParser)
             .then(res => {
-              console.log(res.body.Response.Message);
               expect(res.body.Response.Message).toEqual([scripts.isAttending]);
             });
 

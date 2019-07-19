@@ -42,22 +42,19 @@ describe('Text Queue', () => {
     });
   });
   describe('send alert', () => {
-    test('it sends alert and then updates cache', () => {
+    test('it sends alert and then updates cache', async () => {
       let user = {
         phoneNumber: testingTextQueueNumber,
       };
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
       newtext.key = 'key';
-      return newtext.sendAlert(testingTextQueueNumber)
-        .then((sent) => {
-          console.log(sent);
-          expect(sent.sessionType).toEqual(ALERT_SENT);
-          expect(sent.stateDistrict).toEqual('TX-33');
-        });
+      const sent = await newtext.sendAlert(testingTextQueueNumber);
+      expect(sent.sessionType).toEqual(ALERT_SENT);
+      expect(sent.stateDistrict).toEqual('TX-33');
     });
 
-    test('wont send if the user has already recieved alert', () => {
+    test('wont send if the user has already received alert', () => {
       let userReq = {
         body: {
           From: testingTextQueueNumber,
@@ -73,7 +70,6 @@ describe('Text Queue', () => {
       let newtext = new Text(user, newtownhall);
       return newtext.sendAlert(testingTextQueueNumber)
         .then((sent) => {
-          console.log(sent);
           expect(sent.sessionType).toEqual(null);
         });
     });
