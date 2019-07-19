@@ -5,7 +5,7 @@ module.exports = function (req, res, next) {
   if (!req.body.From || !req.body.Body){
     return next(new Error('No data'));
   }
-  User.getUserFromCache(req.body.From)
+  return User.getUserFromCache(req.body.From)
     .then(user => {
       req.zipcode = user.zipcode;
       req.sessionType = user.sessionType || null;
