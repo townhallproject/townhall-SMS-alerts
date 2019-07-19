@@ -32,7 +32,9 @@ module.exports = function(req, res, next){
     } else if (response.substring(0,3).toLowerCase() === 'not') {
       unSubscribeFromRep(req, res);
     }
-    return new User(req).deleteFromCache();
+    return new User(req).updateCache({
+      sessionType: null,
+    });
   }
 
   // asked if they want to subscribe 
