@@ -4,11 +4,18 @@ const express = require('express');
 const PORT = process.env.PORT || 3000;
 const smsRouter = require('./routes/sms');
 const voiceRouter = require('./routes/voice');
+const cors = require('cors');
+
 const app = express();
 const messaging = require('./lib/response');
 const reqTwiml = require('./middleware/session');
 const database = require('./database/firebaseListener');
 const checkQueue = require('./database/sendTextsInQueue');
+
+app.use(
+  cors()
+);
+
 app.use(reqTwiml, smsRouter);
 app.use(voiceRouter);
 
