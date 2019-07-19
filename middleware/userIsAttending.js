@@ -3,7 +3,7 @@ const User = require('../models/user.js');
 const messaging = require('../lib/response');
 const scripts = require('../lib/scripts');
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
   let newUser = new User(req);
   newUser.updateAttending(req).then(() => {
     req.twiml.message(scripts.isAttending);
