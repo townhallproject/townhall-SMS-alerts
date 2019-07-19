@@ -112,7 +112,7 @@ module.exports = class User {
       time_stamp: moment().format(),
     };
 
-    const firebaseRef = firebasemock || firebasedb.ref(`${userPath}/${this.phoneNumber}`)
+    const firebaseRef = firebasemock || firebasedb.ref(`${userPath}/${this.phoneNumber}`);
 
     return firebaseRef.child('messages').push(message)
       .then(() => {
