@@ -26,6 +26,9 @@ module.exports = class User {
       .then(snapshot => {
         if (snapshot.exists()) {
           let user = snapshot.val();
+          if (!user.phoneNumber) {
+            user.phoneNumber = snapshot.key;
+          }
           user.messageCount = snapshot.child('messages').numChildren();
           user.messages = map(user.messages);
           return user;
