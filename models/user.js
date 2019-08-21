@@ -128,6 +128,12 @@ module.exports = class User {
       });
   }
 
+  storeNewPotentialVol(firebasemock) {
+    let userPath = 'sms-users/potential-vols';
+    let firebaseref = firebasemock || firebasedb.ref(`${userPath}/${this.phoneNumber}`);
+    return firebaseref.update(this);
+  }
+
   deleteFromCache() {
     let userPath = 'sms-users/cached-users';
     const ref = firebasedb.ref(`${userPath}/${this.phoneNumber}`);
