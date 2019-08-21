@@ -57,8 +57,8 @@ module.exports = function(req, res, next){
     if (req.messageCount === 1 && response.toLowerCase() === 'yes') {
       // still save that we responded in the message flow
       user.updateCacheWithMessageInConvo(scripts.willVolunteer, false, VOL_RECRUIT);
-      messaging.sendAndWrite(req, res, scripts.willVolunteer);
-      return;
+      user.storeNewPotentialVol().catch((err) => console.log('error saving vol', err));
+      return messaging.sendAndWrite(req, res, scripts.willVolunteer);
     }
     if (production) {
       // forward message to nathan's phone
