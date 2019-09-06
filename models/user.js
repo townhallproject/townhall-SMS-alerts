@@ -136,12 +136,33 @@ module.exports = class User {
     let firebaseref = firebasemock || firebasedb.ref(`${userPath}/${this.phoneNumber}`);
     const toSave = Object.assign({}, this);
     toSave.respondedOn = moment().format();
-    return firebaseref.update(this);
+    return firebaseref.update(toSave);
   }
 
   deleteFromCache() {
     let userPath = 'sms-users/cached-users';
     const ref = firebasedb.ref(`${userPath}/${this.phoneNumber}`);
     return ref.remove();
+  }
+
+  deleteUser() {
+    let districts = [];
+    let phoneNumber = this.phoneNumber;
+    firebasedb.ref(`sms-users/all-users/${phoneNumber}`).child('districts').once('value', function (snapshot) {
+      if (!snapshot.exists()) {
+        return Promise.reject('not a user');
+      }
+      districts = snapshot.val();
+      return districts;
+    })
+      .then((districts) => {
+        let firebaseref = firebasedb.ref();
+
+        districts.forEach(district => {
+          let disPath = `sms-users/${district.state}/${district.district}/${phoneNumber}`;
+          firebaseref.child(disPath).remove();
+        });
+        return firebaseref.child(`sms-users/all-users/${phoneNumber}`).remove();
+      });
   }
 };
