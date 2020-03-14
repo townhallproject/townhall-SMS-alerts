@@ -70,7 +70,8 @@ module.exports = class Text {
     const thisAlert = this;
     return User.getUserFromCache(cacheNumber)
       .then(cachedUser => {
-        if (cachedUser && cachedUser.sessionType === ALERT_SENT) {
+        if (cachedUser && cachedUser.sessionType === ALERT_SENT && cachedUser.eventId === this.eventId) {
+          // already sent this alert 
           return Promise.resolve({
             sessionType: null,
           });
