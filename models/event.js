@@ -159,6 +159,8 @@ module.exports = class TownHall {
     }
     if (this.meetingType === 'Empty Chair Town Hall') {
       message = `${title} Members of your community have organized an ${this.meetingType} and invited ${this.moc} to speak with their constituents at ${this.time}, ${this.date}. Address: ${this.address}.`;
+    } else if (this.meetingType === 'Tele-Town Hall') {
+      message = `${title} ${this.moc} is holding a ${this.meetingType} at ${this.time}, ${this.date}. Connect: ${this.phoneNumber ? this.phoneNumber : this.link}`;
     } else {
       message = `${title} ${this.moc} is holding a ${this.meetingType} at ${this.time}, ${this.date}. Address: ${this.address}.`;
     }

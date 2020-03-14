@@ -21,7 +21,7 @@ describe('Text class', () => {
       };
       let newtownhall = new TownHall(townhalldata);
       let newtext = new Text(user, newtownhall);
-      expect(newtext.body).toEqual('Upcoming town hall:  Marc Veasey is holding a Tele-Town Hall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.');
+      expect(newtext.body).toEqual('Upcoming town hall:  Marc Veasey is holding a Tele-Town Hall at 9:30 AM, Fri, Nov 17, 2017. Connect: https://www.facebook.com/events/149229795682973/');
     });
   });
 
