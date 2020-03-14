@@ -7,7 +7,7 @@ const User = require('./user');
 const Text = require('./texts');
 
 const maxMeters = 100 * 1609.34;
-const includeEventType = ['Town Hall', 'Campaign Town Hall', 'Empty Chair Town Hall'];
+const includeEventType = ['Tele-Town Hall'];
 const includeIconFlags = ['mfol'];
 
 module.exports = class TownHall {
