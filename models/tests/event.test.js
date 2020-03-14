@@ -66,7 +66,7 @@ describe('class TownHall', () => {
       let newTownHall = new TownHall(testTownHallData);
       let include = newTownHall.print();
       expect(include).toEqual(
-        ' Marc Veasey is holding a Town Hall at 9:30 AM, Fri, Nov 17, 2017. Address: TCC South Campus Recital Hall, 5301 Campus Dr, Fort Worth, TX 76119.'      
+        ' Marc Veasey is holding a Tele-Town Hall at 9:30 AM, Fri, Nov 17, 2017. Connect: https://www.facebook.com/events/149229795682973/'
       );
     });
   });

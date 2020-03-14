@@ -7,7 +7,7 @@ const User = require('./user');
 const Text = require('./texts');
 
 const maxMeters = 100 * 1609.34;
-const includeEventType = ['Town Hall', 'Campaign Town Hall', 'Empty Chair Town Hall'];
+const includeEventType = ['Tele-Town Hall'];
 const includeIconFlags = ['mfol'];
 
 module.exports = class TownHall {
@@ -159,6 +159,8 @@ module.exports = class TownHall {
     }
     if (this.meetingType === 'Empty Chair Town Hall') {
       message = `${title} Members of your community have organized an ${this.meetingType} and invited ${this.moc} to speak with their constituents at ${this.time}, ${this.date}. Address: ${this.address}.`;
+    } else if (this.meetingType === 'Tele-Town Hall') {
+      message = `${title} ${this.moc} is holding a ${this.meetingType} at ${this.time}, ${this.date}. Connect: ${this.phoneNumber ? this.phoneNumber : this.link}`;
     } else {
       message = `${title} ${this.moc} is holding a ${this.meetingType} at ${this.time}, ${this.date}. Address: ${this.address}.`;
     }

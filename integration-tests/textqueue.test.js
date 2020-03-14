@@ -64,6 +64,7 @@ describe('Text Queue', () => {
       let user = new User(userReq);
       user.updateCache({
         sessionType: ALERT_SENT,
+        eventId: 'fb_149229795682973',
       });
 
       let newtownhall = new TownHall(townhalldata);

@@ -15,35 +15,68 @@ const {
   VOL_RECRUIT,
 } = constants;
 
-const body = `Hi! This is Jenita with Town Hall Project. 
-We're in the midst of a month-long Congressional--when hundreds of town halls are held, and we need YOUR help! Can you volunteer just 1 hour / week from your own home to help us make sure Americans are informed of crucial opportunities to Show Up and Speak Out? There’s no easier way to play a powerful part in holding our elected officials accountable. To learn more, please reply back with YES.`;
+const body = `Hi! This is Nathan with Town Hall Project. Hard to believe but Congress is only in session 12 more weeks in 2019. But there's still time for crucial legislation to pass with real constituent pressure. Can you volunteer just 1 hour / week from your own home to help us make sure Americans are informed of crucial opportunities to Show Up and Speak Out? To learn more, please reply back with YES`;
 
 const sendMessageAndSave = (user) => {
   User.getUserFromCache(user.phoneNumber)
     .then(cachedUser => {
       // already sent alert to this user 
-      if (cachedUser.sessionType === VOL_RECRUIT) {
+      if (cachedUser.sessionType === VOL_RECRUIT || (cachedUser.messages && cachedUser.messages.length )) {
+        console.log('already sent to this user', cachedUser.sessionType, cachedUser.messages);
         return;
       }
       messaging.newMessage(body, user.phoneNumber)
         .then(() => {
           user.updateCacheWithMessageInConvo(body, false, VOL_RECRUIT);
         })
-        .catch((e) => console.log('ERROR SENDING MESSAGES', e));
-    });
+        .catch((e) => {
+          console.log('ERROR SENDING MESSAGES', e);
+          if (e.message === 'The message From/To pair violates a blacklist rule.') {
+            user.deleteUser();
+            user.deleteFromCache();
+          }
+        });
+    }).catch(console.log);
 };
 const states = [
-  'AZ',
-  'CO',
-  'FL',
-  'ME',
-  'MD',
-  'MI',
-  'NV',
-  'NC',
-  'OR',
-  'PA',
-  'VA',
+  'AL',
+  'AK',
+  'AR',
+  'CA',
+  'CT',
+  'DE',
+  'GA',
+  'HI',
+  'ID',
+  'IL',
+  'IN',
+  'IA',
+  'KS',
+  'KY',
+  'LA',
+  'MA',
+  'MN',
+  'MS',
+  'MO',
+  'MT',
+  'NE',
+  'NH',
+  'NJ',
+  'NM',
+  'NY',
+  'ND',
+  'OH',
+  'OK',
+  'RI',
+  'SD',
+  'TN',
+  'TX',
+  'UT',
+  'VT',
+  'WA',
+  'WV',
+  'WI',
+  'WY',
 ];
 const getUsers = () => {
 
