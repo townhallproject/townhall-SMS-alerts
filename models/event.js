@@ -108,6 +108,7 @@ module.exports = class TownHall {
 
   lookupUsersAndAddToQueue() {
     let townhall = this;
+    console.log(townhall.state, townhall.district);
     if (townhall.district === 'Senate') {
       return firebasedb.ref(`sms-users/${townhall.state}`).once('value').then((snapshot) => {
         if (snapshot.exists()) {
@@ -133,7 +134,7 @@ module.exports = class TownHall {
         .then((users) => {
           if (users.length > 0) {
             users.forEach(user => {
-              //make a new text to send, add to queue
+              // make a new text to send, add to queue
               townhall.addToQueue(user);
             });
           }
