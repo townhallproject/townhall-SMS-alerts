@@ -7,14 +7,19 @@ const User = require('./user');
 const Text = require('./texts');
 
 const maxMeters = 100 * 1609.34;
-const includeEventType = ['Tele-Town Hall'];
+const includeEventType = ['Tele-Town Hall', 'Campaign Tele-Town Hall'];
 const includeIconFlags = ['mfol'];
+
+const zeroPadDistrict = (district) => {
+  const zeroPadding = '00';
+  return zeroPadding.slice(0, zeroPadding.length - district.length) + district;
+};
 
 module.exports = class TownHall {
   
   constructor (fbtownhall) {
     this.moc = fbtownhall.Member || fbtownhall.displayName;
-    this.district = fbtownhall.district || 'Senate';
+    this.district = fbtownhall.district ? zeroPadDistrict(fbtownhall.district.toString()) : 'Senate';
     this.state = fbtownhall.state;
     this.link= fbtownhall.link || `https://townhallproject.com?eventId=${fbtownhall.eventId}`;
     this.eventId = fbtownhall.eventId;
@@ -43,7 +48,7 @@ module.exports = class TownHall {
       throw new Error('The requested state not found');
     }
 
-    if (!lodash.includes(includeEventType, townhall.meetingType) && !(lodash.includes(includeIconFlags, townhall.iconFlag))){
+    if (!lodash.includes(includeEventType, townhall.meetingType)){
       return false;
     }
     if (!moment(this.dateObj).isAfter()){
