@@ -5,9 +5,7 @@ const TownHall = require('../event');
 const townhalldata = require('./mockTownHall');
 
 let firebasemock = {
-  update: jest.fn(() => {
-    return true;
-  }),
+  update: jest.fn(() => true),
   child: function() {
     return this;
   },

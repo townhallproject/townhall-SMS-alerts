@@ -16,16 +16,12 @@
     "mocha": true
   },
   "rules": {
+    "arrow-body-style": ["error", "as-needed"],
     "no-console": "off",
     "indent": [ "error", 2 ],
     "semi": ["error", "always"],
     "comma-dangle": ["error", "always-multiline"],
     "quotes": ["error", "single", { "allowTemplateLiterals": true }]
-  },
-  "ecmaFeatures": {
-    "modules": true,
-    "impliedStrict": true,
-    "experimentalObjectRestSpread": true
   },
   "extends": "eslint:recommended"
 }

@@ -1,5 +1,4 @@
 'use strict';
-const moment = require('moment');
 const TownHall = require('../models/event.js');
 const firebasedb = require('../lib/firebaseinit');
 

@@ -23,19 +23,15 @@ describe('user cache', () => {
         sessionType: ALERT_SENT,
       };
       return newUser.updateCache(settings)
-        .then(() => {
-          return User.getUserFromCache(user.body.From)
-            .then((userCache) => {
-              expect(userCache.sessionType).toEqual(ALERT_SENT);
-              expect(userCache.hasbeenasked).toEqual(false);
-            });
-        });
+        .then(() => User.getUserFromCache(user.body.From)
+          .then((userCache) => {
+            expect(userCache.sessionType).toEqual(ALERT_SENT);
+            expect(userCache.hasbeenasked).toEqual(false);
+          }));
     });
-    test('it returns an empty object if user doesnt exist', () => {
-      return User.getUserFromCache(testingTextQueueNumber)
-        .then((userCache) => {
-          expect(userCache).toEqual({});
-        });
-    });
+    test('it returns an empty object if user doesnt exist', () => User.getUserFromCache(testingTextQueueNumber)
+      .then((userCache) => {
+        expect(userCache).toEqual({});
+      }));
   });
 });

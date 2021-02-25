@@ -118,17 +118,13 @@ module.exports = class User {
     const firebaseRef = firebasemock || firebasedb.ref(`${userPath}/${this.phoneNumber}`);
 
     return firebaseRef.child('messages').push(message)
-      .then(() => {
-        return firebaseRef.update({
-          sessionType: sessionType || VOL_RECRUIT,
-          last_updated: moment().format(),
-        }).then(() => {
-          return {
-            sentTo: this.phoneNumber,
-            message,
-          };
-        });
-      });
+      .then(() => firebaseRef.update({
+        sessionType: sessionType || VOL_RECRUIT,
+        last_updated: moment().format(),
+      }).then(() => ({
+        sentTo: this.phoneNumber,
+        message,
+      })));
   }
 
   storeNewPotentialVol(firebasemock) {

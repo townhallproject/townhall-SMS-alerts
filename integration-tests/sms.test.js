@@ -50,60 +50,72 @@ afterAll(() => {
     },
   };
   new User(req).deleteFromCache();
-  server.stop()
+  server.stop();
 });
 
 
 describe('SMS', () => {
   describe('POST /sms', () => {
-    test('should respond with a 200 when there is an incoming zipcode', async (done) => {
+    test('should respond with a 200 when there is an incoming zipcode', (done) => {
       let incoming = {Body: '98122', From: '+1111111111'};
-      const res_1 = await request
+      request
         .post(url)
         .type('form')
         .send(incoming)
-        .parse(xml2jsParser);
-      console.log(res_1.status)
-      expect(res_1.status).toEqual(200);
-      expect(Array.isArray(res_1.body.Response.Message)).toBe(true);
-      done();
+        .parse(xml2jsParser)
+        .then(res_1 => {
+
+          console.log(res_1.status);
+          expect(res_1.status).toEqual(200);
+          expect(Array.isArray(res_1.body.Response.Message)).toBe(true);
+          done();
+        });
     });
 
-    test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code.', async (done) => {
+    test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code.', (done) => {
       let incoming = { Body: 'thisshouldfail', From: '+1111111111'};
 
-      const res_1 = await request
+      request
         .post(url)
         .type('form')
         .send(incoming)
-        .parse(xml2jsParser);
-      expect(res_1.status).toEqual(200);
-      expect(res_1.body.Response.Message).toEqual([scripts.default]);
-      done();
+        .parse(xml2jsParser)
+        .then(res_1 => {
+
+          expect(res_1.status).toEqual(200);
+          expect(res_1.body.Response.Message).toEqual([scripts.default]);
+          done();
+        });
     });
 
-    test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code', async (done) => {
+    test('should respond with a 200 when there is an incoming bad zipcode but will prompt for a zip code', (done) => {
       let incoming = { Body: '99999', From: '+1111111111'};
 
-      const res_1 = await request
+      request
         .post(url)
         .type('form')
         .send(incoming)
-        .parse(xml2jsParser);
-      expect(res_1.status).toEqual(200);
-      expect(res_1.body.Response.Message).toEqual([scripts.zipLookupFailed]);
-      done();
+        .parse(xml2jsParser)
+        .then(res_1 => {
+
+          expect(res_1.status).toEqual(200);
+          expect(res_1.body.Response.Message).toEqual([scripts.zipLookupFailed]);
+          done();
+        });
     });
-    test('should return message from an array', async (done) => {
+    test('should return message from an array', (done) => {
       let incoming = { Body: '27278', From: '+1111111111'};
 
-      const res_1 = await request
+      request
         .post(url)
         .type('form')
         .send(incoming)
-        .parse(xml2jsParser);
-      expect(Array.isArray(res_1.body.Response.Message)).toBe(true);
-      done();
+        .parse(xml2jsParser)
+        .then(res_1 => {
+
+          expect(Array.isArray(res_1.body.Response.Message)).toBe(true);
+          done();
+        });
     });
 
     test('it should thank the person for attending ', () => {
@@ -118,19 +130,16 @@ describe('SMS', () => {
       return userToCache.updateCache({
         sessionType: ALERT_SENT,
         eventId: 'eventId',
-        stateDistrict: 'Senate'
+        stateDistrict: 'Senate',
       })
-        .then(() => {
-          return request
-            .post(url)
-            .type('form')
-            .send(incoming)
-            .parse(xml2jsParser)
-            .then(res => {
-              expect(res.body.Response.Message).toEqual([scripts.isAttending]);
-            });
-
-        });
+        .then(() => request
+          .post(url)
+          .type('form')
+          .send(incoming)
+          .parse(xml2jsParser)
+          .then(res => {
+            expect(res.body.Response.Message).toEqual([scripts.isAttending]);
+          }));
 
     });
   });

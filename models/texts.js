@@ -59,9 +59,7 @@ module.exports = class Text {
       stateDistrict: this.type,
     };
     return newUser.updateCache(update)
-      .then(() => {
-        return update;
-      });
+      .then(() => update);
   }
   
   sendAlert(testingNumber){
@@ -88,15 +86,11 @@ module.exports = class Text {
             console.log('sent', sendingNumber);
             thisAlert.markAsSent();
           })
-          .then(() => {
-            return messaging.newMessage(scripts.afterAlertIsSent, sendingNumber)
-              .then(() => {
-                return thisAlert.updateCacheWithAlertData(cacheNumber);
-              })
-              .catch(e => {
-                console.log(e);
-              });
-          })
+          .then(() => messaging.newMessage(scripts.afterAlertIsSent, sendingNumber)
+            .then(() => thisAlert.updateCacheWithAlertData(cacheNumber))
+            .catch(e => {
+              console.log(e);
+            }))
           .catch(e => {
             console.log(e);
             if (e.message === 'The message From/To pair violates a blacklist rule.') {

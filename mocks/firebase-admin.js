@@ -19,9 +19,7 @@ let mockData = {
     exists: () => (false),
   },
   'townHalls' : {
-    val: () => {
-      return {eventId : 'eventId'};
-    },
+    val: () => ({eventId : 'eventId'}),
     exists: () => (true),
   },
   'zipToDistrict/98122': {
