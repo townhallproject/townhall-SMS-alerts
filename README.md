@@ -1,4 +1,4 @@
-# townhall-SMS-alerts [![Build Status](https://travis-ci.org/townhallproject/townhall-SMS-alerts.svg?branch=master)](https://travis-ci.org/townhallproject/townhall-SMS-alerts)
+# townhall-SMS-alerts [![Node.js CI](https://github.com/townhallproject/townhall-SMS-alerts/actions/workflows/node.js.yml/badge.svg)](https://github.com/townhallproject/townhall-SMS-alerts/actions/workflows/node.js.yml)
 
 Motivation: Many people want to know when their member of congress is holding a town hall. Currently they can access this information by going to townhallproject.com and by signing up for email alerts. We want to make this information even more readily available by allowing people to access it with their phones via SMS.
 
