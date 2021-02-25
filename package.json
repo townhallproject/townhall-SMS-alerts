@@ -4,7 +4,7 @@
   "description": "townhalls sms ",
   "main": "index.js",
   "engines": {
-    "node": "8.x"
+    "node": "10.x"
   },
   "scripts": {
     "unit-test": "jest -i --coverage --forceExit models/",
