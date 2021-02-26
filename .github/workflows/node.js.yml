@@ -27,3 +27,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm test --if-present
+      env: 
+        TESTING_PRIVATE_KEY: ${secrets.TESTING_PRIVATE_KEY}
+        TESTING_PROJECT_ID: ${secrets.TESTING_PROJECT_ID}
+        TESTING_CLIENT_ID: ${secrets.TESTING_CLIENT_ID}
+        NODE_ENV: test
+        TWILIO_ACCOUNT_SID_TESTING: ${secrets.TWILIO_ACCOUNT_SID_TESTING}
+        TWILIO_AUTH_TOKEN_TESTING: ${secrets.TWILIO_AUTH_TOKEN_TESTING}
+        TWILIO_TESTING_NUMBER: ${secrets.TWILIO_TESTING_NUMBER}
