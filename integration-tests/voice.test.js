@@ -9,7 +9,6 @@ const xml2jsParser = require('superagent-xml2jsparser');
 let url;
 
 beforeAll(() => {
-  console.log(process.env.NODE_ENV, process.env.TESTING_PROJECT_ID);
   jest.dontMock('firebase-admin');
   let port = 8090;
   url = `http://localhost:${port}/voice`;
