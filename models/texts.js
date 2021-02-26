@@ -67,11 +67,11 @@ module.exports = class Text {
     let cacheNumber = testingNumber || sendingNumber;
     const thisAlert = this;
     if (testing) {
-      console.log('SENDING NUMBER', sendingNumber, 'CACHED NUMBER', cacheNumber)
+      console.log('SENDING NUMBER', sendingNumber, 'CACHED NUMBER', cacheNumber);
     }
     return User.getUserFromCache(cacheNumber)
       .then(cachedUser => {
-        if(testing) {
+        if (testing) {
           console.log(cachedUser);
         }
         if (cachedUser && cachedUser.sessionType === ALERT_SENT && cachedUser.eventId === this.eventId) {
