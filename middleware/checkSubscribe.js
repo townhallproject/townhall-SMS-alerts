@@ -79,7 +79,9 @@ module.exports = function(req, res, next){
       user.deleteFromCache();
       deleteUser(req, res);
       return;
+    } else {
+      messaging.end(res, req.twiml);
     }
-  }
+  } 
   return next();
 };
