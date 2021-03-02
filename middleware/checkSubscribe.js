@@ -60,12 +60,26 @@ module.exports = function(req, res, next){
       user.storeNewPotentialVol().catch((err) => console.log('error saving vol', err));
       return messaging.sendAndWrite(req, res, scripts.willVolunteer);
     }
-    if (production) {
-      // forward message to nathan's phone
-      messaging.newMessage(response, process.env.NATHAN);
-    }
+
     messaging.end(res, req.twiml);
     return;
+  }
+  // vol recruit conversation 
+  if (req.sessionType === constants.OPT_IN) {
+    let user = new User(req);
+    // save message from user
+    user.updateCacheWithMessageInConvo(response, true);
+    // if simple response, send automatic response
+    if (response.toLowerCase() === 'yes') {
+      // still save that we responded in the message flow
+      user.updateCacheWithMessageInConvo(scripts.willStay, false, constants.OPT_IN);
+      user.optInConfirm().catch((err) => console.log('error saving vol', err));
+      return messaging.sendAndWrite(req, res, scripts.willStay);
+    } else if (response.toLowerCase() === 'no') {
+      user.deleteFromCache();
+      deleteUser(req, res);
+      return;
+    }
   }
   return next();
 };

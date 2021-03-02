@@ -135,6 +135,15 @@ module.exports = class User {
     return firebaseref.update(toSave);
   }
 
+  optInConfirm(firebasemock) {
+    let phoneNumber = this.phoneNumber;
+    let firebaseref = firebasemock || firebasedb.ref(`sms-users/all-users/${phoneNumber}`);
+
+    return firebaseref.update({
+      [constants.OPT_IN]: true,
+    });
+  }
+
   deleteFromCache() {
     let userPath = 'sms-users/cached-users';
     const ref = firebasedb.ref(`${userPath}/${this.phoneNumber}`);
