@@ -13,7 +13,7 @@ module.exports = class User {
       .once('value')
       .then((latlngObj) => {
         if (!latlngObj.exists()) {
-          return;
+          return user;
         }
         const latlng = latlngObj.val();
         user.location = { lat: latlng.LAT, lng: latlng.LNG };
