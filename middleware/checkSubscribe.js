@@ -8,7 +8,6 @@ const deleteUser = require('../middleware/deleteUser');
 const userIsAttending = require('../middleware/userIsAttending');
 const unSubscribeFromRep = require('../middleware/unSubscribeFromRep');
 const constants = require('../constants');
-const production = process.env.NODE_ENV === 'production';
 const {
   ALERT_SENT,
   VOL_RECRUIT,
@@ -79,8 +78,6 @@ module.exports = function(req, res, next){
       user.deleteFromCache();
       deleteUser(req, res);
       return;
-    } else {
-      messaging.end(res, req.twiml);
     }
   } 
   return next();
