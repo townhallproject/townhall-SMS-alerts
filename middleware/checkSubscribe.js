@@ -69,16 +69,19 @@ module.exports = function(req, res, next){
     // save message from user
     user.updateCacheWithMessageInConvo(response, true);
     // if simple response, send automatic response
-    if (response.toLowerCase() === 'yes') {
+    if (response.match(/(Y|y)(E|e)(S|s)/g)) {
       // still save that we responded in the message flow
       user.updateCacheWithMessageInConvo(scripts.willStay, false, constants.OPT_IN);
       user.optInConfirm().catch((err) => console.log('error saving vol', err));
       return messaging.sendAndWrite(req, res, scripts.willStay);
-    } else if (response.toLowerCase() === 'no') {
+    } else if (response.match(/(N|n)(O|o)/g)) {
       user.deleteFromCache();
       deleteUser(req, res);
       return;
     }
+    messaging.end(res, req.twiml);
+    return;
+
   } 
   return next();
 };
