@@ -6,13 +6,17 @@ const Text = require('../models/texts');
 
 const sendFromQueue = () => {
   firebasedb.ref('sms-queue').once('value').then((snapshot) => {
+    let index = 0;
     snapshot.forEach((message) => {
       let messageData = new Text(message.val());
       if (moment(messageData.dateObj).isBefore()) {
         console.log('in the past', moment(messageData.dateObj).format('MM/DD/YY, hh:mm A'));
         messageData.remove();
       } else if (messageData.timeToSend() && !message.val().sent) {
-        messageData.sendAlert();
+        index++;
+        setTimeout(() => {
+          messageData.sendAlert();
+        }, 1000 * index);
       } 
     });
   })
