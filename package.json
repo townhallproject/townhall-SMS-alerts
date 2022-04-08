@@ -32,7 +32,7 @@
     "express": "^4.16.2",
     "firebase-admin": "^5.5.0",
     "geo-distance": "^0.1.2",
-    "moment": "^2.22.0",
+    "moment": "^2.29.2",
     "ngrok": "^3.2.3",
     "request": "^2.88.0",
     "spherical-geometry-js": "^1.0.1",
